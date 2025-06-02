@@ -14,6 +14,11 @@ class AuthController {
         const result = await AuthService.login({email, password});
         sendResponse(res, {code : result.code, message : result.message, accessToken : result.accessToken});
     }
+
+    static logout = async (req: Request, res: Response) => {
+        const result = await AuthService.logout(req, res);
+        sendResponse(res, {code: result?.code, message: result?.message});
+    }
 }
 
 export default AuthController;

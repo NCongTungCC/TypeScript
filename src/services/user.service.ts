@@ -1,5 +1,6 @@
 import { User } from "../entities/user.entity";
 import { UserInterface } from "../interfaces/user.interface";
+
 class UserService {
     static async getUser({id, role} : Partial<UserInterface>) {
         const users = await User.createQueryBuilder('user')

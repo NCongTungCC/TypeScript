@@ -5,6 +5,12 @@ export enum Gender {
   FEMALE = 'female'
 }
 
+export enum role {
+  ADMIN = 'admin',
+  MANAGER = 'manager',
+  USER = 'user'
+}
+
 @Entity()
 export class User extends BaseEntity {
         @PrimaryGeneratedColumn()
@@ -25,7 +31,7 @@ export class User extends BaseEntity {
         @Length(6, 20, {message : 'Mật khẩu phải có độ dài từ 6 đến 20 ký tự'})
         password!: string;
 
-        @Column()
+        @Column({ type: 'enum', enum : role})
         role!: string;
 
         @Column()

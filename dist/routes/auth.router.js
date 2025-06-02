@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const auth_controller_1 = __importDefault(require("../auth/auth.controller"));
 const catchAsync_middleware_1 = __importDefault(require("../middlewares/catchAsync.middleware"));
+const authentication_middleware_1 = __importDefault(require("../middlewares/authentication.middleware"));
 const router = (0, express_1.Router)();
 /**
  * @swagger
@@ -151,7 +152,8 @@ router.post('/signup', (0, catchAsync_middleware_1.default)(auth_controller_1.de
  *                   example: "Đăng nhập thành công"
  *                 accessToken:
  *                   type: string
- *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sZSI6InVzZXIiLCJpYXQiOjE3NDg4MzAxODIsImV4cCI6MTc0ODgzMTk4Mn0.CCq45tW-6ND-c1Fafejj9C87q_wOBxCCZjr7EY0W_wo"
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sZSI6InVzZXIiLCJpYXQ
+ *                             iOjE3NDg4MzAxODIsImV4cCI6MTc0ODgzMTk4Mn0.CCq45tW-6ND-c1Fafejj9C87q_wOBxCCZjr7EY0W_wo"
  *       400:
  *         description: Sai tài khoản mật khẩu
  *         content:
@@ -193,4 +195,39 @@ router.post('/signup', (0, catchAsync_middleware_1.default)(auth_controller_1.de
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
 router.post('/login', (0, catchAsync_middleware_1.default)(auth_controller_1.default.login));
+/**
+ * @swagger
+ * /logout:
+ *   get:
+ *     summary: Đăng xuất
+ *     description: Đăng xuất tài khoản
+ *     responses:
+ *       200:
+ *         description: Đăng xuất thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: "Đăng xuất thành công"
+ *       500:
+ *         description: Lỗi máy chủ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: "Đã xảy ra lỗi phía máy chủ"
+ */
+router.get('/logout', authentication_middleware_1.default, (0, catchAsync_middleware_1.default)(auth_controller_1.default.logout));
 exports.default = router;

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import AuthController from "../auth/auth.controller";
 import catchAsync from "../middlewares/catchAsync.middleware";
+import authentication from "../middlewares/authentication.middleware";
 const router = Router();
 
 /**
@@ -148,7 +149,8 @@ router.post('/signup', catchAsync(AuthController.signup));
  *                   example: "Đăng nhập thành công"
  *                 accessToken:          
  *                   type: string
- *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sZSI6InVzZXIiLCJpYXQiOjE3NDg4MzAxODIsImV4cCI6MTc0ODgzMTk4Mn0.CCq45tW-6ND-c1Fafejj9C87q_wOBxCCZjr7EY0W_wo"
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sZSI6InVzZXIiLCJpYXQ
+ *                             iOjE3NDg4MzAxODIsImV4cCI6MTc0ODgzMTk4Mn0.CCq45tW-6ND-c1Fafejj9C87q_wOBxCCZjr7EY0W_wo"
  *       400:
  *         description: Sai tài khoản mật khẩu
  *         content:
@@ -190,5 +192,42 @@ router.post('/signup', catchAsync(AuthController.signup));
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
 router.post('/login', catchAsync(AuthController.login));
+
+/**
+ * @swagger
+ * /logout:
+ *   get:
+ *     summary: Đăng xuất
+ *     description: Đăng xuất tài khoản
+ *     responses:
+ *       200:
+ *         description: Đăng xuất thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: "Đăng xuất thành công"
+ *       500:
+ *         description: Lỗi máy chủ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: "Đã xảy ra lỗi phía máy chủ"
+ */
+
+router.get('/logout',authentication, catchAsync(AuthController.logout));
 
 export default router;

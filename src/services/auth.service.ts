@@ -4,6 +4,8 @@ import { hashPassword, comparePassword } from "../helpers/password.helper";
 import { generateToken } from "../helpers/generateToken.helper";
 import { validateAndThrowIfInvalid } from "../ultis/validate.ulti";
 
+import { Request, Response } from "express";
+
 class AuthService {
     static async signup({username, email, password, avatar, gender, birthday} : Partial<UserInterface>) {
         const users = await User.findOne({ where: { email: email } });
@@ -61,8 +63,16 @@ class AuthService {
           accessToken : accessToken,
        }
     }
-    static async logout() {
+    static async logout(req: Request, res: Response) {
+        res.cookie('jwt', '', {
+            expires: new Date(0),
+            httpOnly: true,
+        })
 
+        return {
+            code: 200,
+            message: 'Đăng xuất thành công',
+        }
     }
 }
 

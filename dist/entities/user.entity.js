@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = exports.Gender = void 0;
+exports.User = exports.role = exports.Gender = void 0;
 const typeorm_1 = require("typeorm");
 const class_validator_1 = require("class-validator");
 var Gender;
@@ -17,6 +17,12 @@ var Gender;
     Gender["MALE"] = "male";
     Gender["FEMALE"] = "female";
 })(Gender || (exports.Gender = Gender = {}));
+var role;
+(function (role) {
+    role["ADMIN"] = "admin";
+    role["MANAGER"] = "manager";
+    role["USER"] = "user";
+})(role || (exports.role = role = {}));
 let User = class User extends typeorm_1.BaseEntity {
 };
 exports.User = User;
@@ -43,7 +49,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ type: 'enum', enum: role }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
