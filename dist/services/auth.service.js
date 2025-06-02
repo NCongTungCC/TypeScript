@@ -76,10 +76,6 @@ class AuthService {
     }
     static logout(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            res.cookie('jwt', '', {
-                expires: new Date(0),
-                httpOnly: true,
-            });
             return {
                 code: 200,
                 message: 'Đăng xuất thành công',

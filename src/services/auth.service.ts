@@ -48,7 +48,7 @@ class AuthService {
                 code : 404,
                 message : 'Không tìm thấy tài khoản',
             }
-        }
+        }       
         const isMatch = await comparePassword(password as string, users.password);
         if(!isMatch) {
             return {
@@ -64,16 +64,10 @@ class AuthService {
        }
     }
     static async logout(req: Request, res: Response) {
-        res.cookie('jwt', '', {
-            expires: new Date(0),
-            httpOnly: true,
-        })
-
         return {
             code: 200,
             message: 'Đăng xuất thành công',
         }
-    }
-}
+    }}
 
 export default AuthService;

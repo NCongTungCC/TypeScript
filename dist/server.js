@@ -44,11 +44,15 @@ const config_1 = require("./configs/config");
 const swaggerconfig_1 = require("./configs/swaggerconfig");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const error_middleware_1 = __importDefault(require("./middlewares/error.middleware"));
+const cors_1 = __importDefault(require("cors"));
+const morgan_1 = __importDefault(require("morgan"));
 dotenv.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 app.use(express_1.default.json());
+app.use((0, morgan_1.default)('dev'));
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerconfig_1.swaggerSpec));
+app.use((0, cors_1.default)());
 app.use('', index_router_1.default);
 app.use(error_middleware_1.default);
 config_1.AppDataSource.initialize()

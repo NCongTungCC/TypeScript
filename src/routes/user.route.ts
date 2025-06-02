@@ -81,7 +81,6 @@ const router = Router();
  *                   type: string
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
-
 router.get('/users', authentication, catchAsync(UserController.getUser));
 
 export default router;

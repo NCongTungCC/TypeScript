@@ -6,6 +6,9 @@ import { AppDataSource } from './configs/config';
 import { swaggerSpec } from './configs/swaggerconfig';
 import swaggerUi from 'swagger-ui-express';
 import errorHandler from './middlewares/error.middleware';
+import cors from 'cors';
+import morgan from 'morgan';
+
 dotenv.config();
 
 const app = express();
@@ -14,7 +17,11 @@ const port = process.env.PORT || 3000
 
 app.use(express.json());
 
+app.use(morgan('dev'));
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use(cors());
 
 app.use('', router)
 
