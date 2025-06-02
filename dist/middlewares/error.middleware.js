@@ -5,6 +5,7 @@ const errorHandler = (err, req, res, next) => {
     res.status(500).json({
         code: 500,
         message: 'Đã xảy ra lỗi phía máy chủ',
+        error: err.message
     });
 };
 exports.default = errorHandler;
