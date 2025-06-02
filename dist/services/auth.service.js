@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_entity_1 = require("../entities/user.entity");
 const password_helper_1 = require("../helpers/password.helper");
 const generateToken_helper_1 = require("../helpers/generateToken.helper");
+const validate_ulti_1 = require("../ultis/validate.ulti");
 class AuthService {
     static signup(_a) {
         return __awaiter(this, arguments, void 0, function* ({ username, email, password, avatar, gender, birthday }) {
@@ -22,24 +23,25 @@ class AuthService {
                     message: "Email đã tồn tại.",
                 };
             }
-            const hashedPassword = yield (0, password_helper_1.hashPassword)(password);
             const count = yield user_entity_1.User.count();
             const role = count === 0 ? "admin" : "user";
             const newUser = yield user_entity_1.User.create({
                 username,
                 email,
-                password: hashedPassword,
+                password,
                 avatar,
                 gender: gender,
                 role,
                 birthday: new Date(birthday),
             });
+            yield (0, validate_ulti_1.validateAndThrowIfInvalid)(newUser);
             if (!newUser) {
                 return {
                     code: 400,
                     message: 'Đăng ký thất bại',
                 };
             }
+            newUser.password = (yield (0, password_helper_1.hashPassword)(password));
             yield newUser.save();
             return {
                 code: 200,

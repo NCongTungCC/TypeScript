@@ -9,16 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateAndThrowIfInvalid = validateAndThrowIfInvalid;
+exports.validateAndThrowIfInvalid = void 0;
 const class_validator_1 = require("class-validator");
-function validateAndThrowIfInvalid(entity) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const errors = yield (0, class_validator_1.validate)(entity);
-        if (errors.length > 0) {
-            throw new Error(JSON.stringify(errors.map(err => ({
-                property: err.property,
-                constraints: err.constraints,
-            }))));
-        }
-    });
-}
+const validateAndThrowIfInvalid = (entity) => __awaiter(void 0, void 0, void 0, function* () {
+    const errors = yield (0, class_validator_1.validate)(entity);
+    if (errors.length > 0) {
+        throw new Error(JSON.stringify(errors.map(err => ({
+            property: err.property,
+            constraints: err.constraints,
+        }))));
+    }
+});
+exports.validateAndThrowIfInvalid = validateAndThrowIfInvalid;

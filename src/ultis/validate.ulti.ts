@@ -1,6 +1,6 @@
 import { validate } from 'class-validator';
 
-export async function validateAndThrowIfInvalid(entity: object) {
+export const validateAndThrowIfInvalid = async (entity: object) => {
   const errors = await validate(entity);
   if (errors.length > 0) {
     throw new Error(JSON.stringify(errors.map(err => ({
@@ -8,4 +8,4 @@ export async function validateAndThrowIfInvalid(entity: object) {
       constraints: err.constraints,
     }))));
   }
-}
+};

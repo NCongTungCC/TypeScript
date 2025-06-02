@@ -2,6 +2,7 @@ import { User } from "../entities/user.entity";
 import { UserInterface } from "../interfaces/user.interface";
 import { hashPassword, comparePassword } from "../helpers/password.helper";
 import { generateToken } from "../helpers/generateToken.helper";
+import { validateAndThrowIfInvalid } from "../ultis/validate.ulti";
 
 class AuthService {
     static async signup({username, email, password, avatar, gender, birthday} : Partial<UserInterface>) {
@@ -12,25 +13,25 @@ class AuthService {
                 message: "Email đã tồn tại.",
             };
         }
-        const hashedPassword = await hashPassword(password as string);
         const count = await User.count();
         const role = count === 0 ? "admin" : "user"; 
-
         const newUser = await User.create({
             username,
             email,
-            password : hashedPassword,
+            password,
             avatar,
             gender : gender as any,
             role,
             birthday : new Date(birthday as Date),
         })
+        await validateAndThrowIfInvalid(newUser);
         if(!newUser) {
             return {
                 code : 400,
                 message : 'Đăng ký thất bại',
             }
         }
+        newUser.password = await hashPassword(password as string) as string;
         await newUser.save();
         return {
             code : 200,
@@ -61,7 +62,7 @@ class AuthService {
        }
     }
     static async logout() {
-        
+
     }
 }
 

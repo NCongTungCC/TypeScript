@@ -9,7 +9,7 @@ const options = {
       description: 'API',
     },
     servers: [
-      { url: 'http://localhost:5000/libary' },
+      { url: 'http://localhost:5000/library/api/v1' },
     ],
     components: {
       securitySchemes: {
