@@ -1,0 +1,76 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const user_entity_1 = require("../entities/user.entity");
+const password_helper_1 = require("../helpers/password.helper");
+const generateToken_helper_1 = require("../helpers/generateToken.helper");
+class AuthService {
+    static signup(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ username, email, password, avatar, gender, birthday }) {
+            const users = yield user_entity_1.User.findOne({ where: { email: email } });
+            if (users) {
+                return {
+                    code: 400,
+                    message: "Email đã tồn tại.",
+                };
+            }
+            const hashedPassword = yield (0, password_helper_1.hashPassword)(password);
+            const count = yield user_entity_1.User.count();
+            const role = count === 0 ? "admin" : "user";
+            const newUser = yield user_entity_1.User.create({
+                username,
+                email,
+                password: hashedPassword,
+                avatar,
+                gender: gender,
+                role,
+                birthday: new Date(birthday),
+            });
+            if (!newUser) {
+                return {
+                    code: 400,
+                    message: 'Đăng ký thất bại',
+                };
+            }
+            yield newUser.save();
+            return {
+                code: 200,
+                message: 'Đăng ký thành công',
+                data: newUser,
+            };
+        });
+    }
+    static login(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ email, password }) {
+            const users = yield user_entity_1.User.findOne({ where: { email: email } });
+            if (!users) {
+                return {
+                    code: 404,
+                    message: 'Không tìm thấy tài khoản',
+                };
+            }
+            const isMatch = yield (0, password_helper_1.comparePassword)(password, users.password);
+            if (!isMatch) {
+                return {
+                    code: 400,
+                    message: 'Mật khẩu không chính xác',
+                };
+            }
+            const accessToken = yield (0, generateToken_helper_1.generateToken)(users);
+            return {
+                code: 200,
+                message: 'Đăng nhập thành công',
+                accessToken: accessToken,
+            };
+        });
+    }
+}
+exports.default = AuthService;

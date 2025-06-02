@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                    // Biên dịch code sang ES6 (hỗ trợ tốt cho Node.js)
+    "module": "commonjs",               // Sử dụng CommonJS module (phù hợp với Node.js)
+    "outDir": "./dist",                 // Thư mục đầu ra cho các file JS đã biên dịch
+    "rootDir": "./src",                 // Thư mục gốc chứa code TypeScript
+    "strict": true,                     // Bật các kiểm tra kiểu nghiêm ngặt
+    "esModuleInterop": true,            // Hỗ trợ import module không phải ES (như Express, Mongoose)
+    "skipLibCheck": true,               // Bỏ qua kiểm tra kiểu trong các file thư viện (tăng tốc biên dịch)
+    "forceConsistentCasingInFileNames": true, // Đảm bảo tên file phân biệt hoa thường
+    "moduleResolution": "node",         // Sử dụng cơ chế phân giải module của Node.js
+    "resolveJsonModule": true,          // Cho phép import file JSON (nếu cần)
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": ["src/**/*"],              // Chỉ biên dịch các file trong thư mục src
+  "exclude": ["node_modules", "dist"]   // Loại bỏ thư mục node_modules và dist khỏi biên dịch
+}
