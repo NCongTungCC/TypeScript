@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const auth_controller_1 = __importDefault(require("../auth/auth.controller"));
+const catchAsync_middleware_1 = __importDefault(require("../middlewares/catchAsync.middleware"));
 const router = (0, express_1.Router)();
 /**
  * @swagger
@@ -114,7 +115,7 @@ const router = (0, express_1.Router)();
  *                   type: string
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
-router.post('/signup', auth_controller_1.default.signup);
+router.post('/signup', (0, catchAsync_middleware_1.default)(auth_controller_1.default.signup));
 /**
  * @swagger
  * /login:
@@ -191,5 +192,5 @@ router.post('/signup', auth_controller_1.default.signup);
  *                   type: string
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
-router.post('/login', auth_controller_1.default.login);
+router.post('/login', (0, catchAsync_middleware_1.default)(auth_controller_1.default.login));
 exports.default = router;

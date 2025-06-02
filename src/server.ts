@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import { AppDataSource } from './configs/config';
 import { swaggerSpec } from './configs/swaggerconfig';
 import swaggerUi from 'swagger-ui-express';
+import errorHandler from './middlewares/error.middleware';
 dotenv.config();
 
 const app = express();
@@ -16,6 +17,8 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('', router)
+
+app.use(errorHandler);
 
 AppDataSource.initialize()
   .then(() => {

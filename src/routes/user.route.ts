@@ -1,6 +1,7 @@
 import { Router } from "express";
 import UserController from "../controllers/user.controller";
 import authentication from "../middlewares/authentication.middleware";
+import catchAsync from "../middlewares/catchAsync.middleware";
 
 const router = Router();
 /**
@@ -81,6 +82,6 @@ const router = Router();
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
 
-router.get('/users', authentication, UserController.getUser);
+router.get('/users', authentication, catchAsync(UserController.getUser));
 
 export default router;

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const user_controller_1 = __importDefault(require("../controllers/user.controller"));
 const authentication_middleware_1 = __importDefault(require("../middlewares/authentication.middleware"));
+const catchAsync_middleware_1 = __importDefault(require("../middlewares/catchAsync.middleware"));
 const router = (0, express_1.Router)();
 /**
  * @swagger
@@ -84,5 +85,5 @@ const router = (0, express_1.Router)();
  *                   type: string
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
-router.get('/users', authentication_middleware_1.default, user_controller_1.default.getUser);
+router.get('/users', authentication_middleware_1.default, (0, catchAsync_middleware_1.default)(user_controller_1.default.getUser));
 exports.default = router;

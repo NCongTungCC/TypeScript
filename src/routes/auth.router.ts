@@ -1,5 +1,6 @@
 import { Router } from "express";
 import AuthController from "../auth/auth.controller";
+import catchAsync from "../middlewares/catchAsync.middleware";
 const router = Router();
 
 /**
@@ -110,7 +111,7 @@ const router = Router();
  *                   type: string
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
-router.post('/signup', AuthController.signup);
+router.post('/signup', catchAsync(AuthController.signup));
 
 /**
  * @swagger
@@ -188,6 +189,6 @@ router.post('/signup', AuthController.signup);
  *                   type: string
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
-router.post('/login', AuthController.login);
+router.post('/login', catchAsync(AuthController.login));
 
 export default router;
