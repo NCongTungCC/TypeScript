@@ -13,31 +13,22 @@ const user_entity_1 = require("../entities/user.entity");
 class UserService {
     static getUser(_a) {
         return __awaiter(this, arguments, void 0, function* ({ id, role }) {
-            const users = yield user_entity_1.User.find();
+            const users = yield user_entity_1.User.createQueryBuilder('user')
+                .where(role === 'admin' ? '1=1' : role === 'manager' ? 'user.role = :filterRole' : 'user.id = :id', role === 'admin' ? {}
+                : role === 'manager'
+                    ? { filterRole: 'user' }
+                    : { id: id })
+                .getMany();
             if (!users) {
                 return {
                     code: 404,
-                    message: 'Không tìm thấy',
-                };
-            }
-            if (role == 'admin') {
-                return {
-                    code: 200,
-                    message: 'Lấy thành công',
-                    data: users,
-                };
-            }
-            else if (role == 'manager') {
-                return {
-                    code: 200,
-                    message: 'Lấy thành công',
-                    data: users.filter((item) => item.role == 'user')
+                    message: 'Không tìm thấy người dùng',
                 };
             }
             return {
                 code: 200,
                 message: 'Lấy thành công',
-                data: users.filter((item) => item.id == id),
+                data: users,
             };
         });
     }

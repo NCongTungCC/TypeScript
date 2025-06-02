@@ -2,30 +2,22 @@ import { User } from "../entities/user.entity";
 import { UserInterface } from "../interfaces/user.interface";
 class UserService {
     static async getUser({id, role} : Partial<UserInterface>) {
-        const users = await User.find();
+        const users = await User.createQueryBuilder('user')
+            .where( role === 'admin' ? '1=1' : role === 'manager' ? 'user.role = :filterRole' : 'user.id = :id', role === 'admin' ? {} 
+                    : role === 'manager'
+                    ? { filterRole: 'user' }
+                    : { id: id })
+            .getMany();
         if(!users) {
             return {
                 code : 404,
-                message : 'Không tìm thấy',
+                message : 'Không tìm thấy người dùng',
             }
         }
-        if(role == 'admin') {
-            return {
-                code : 200,
-                message : 'Lấy thành công',
-                data : users,
-            }
-        } else if(role == 'manager') {
-            return {
-                code : 200,
-                message : 'Lấy thành công',
-                data : users.filter((item) => item.role == 'user')
-            }
-        } 
-          return {
+        return {
             code: 200,
             message: 'Lấy thành công',
-            data : users.filter((item) => item.id == id),
+            data : users,
         }
     }
 }

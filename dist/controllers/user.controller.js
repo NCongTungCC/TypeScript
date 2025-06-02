@@ -19,9 +19,10 @@ class UserController {
 }
 _a = UserController;
 UserController.getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
+    var _b, _c;
     const role = (_b = req.user) === null || _b === void 0 ? void 0 : _b.role;
-    const result = yield user_service_1.default.getUser({ role });
+    const id = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
+    const result = yield user_service_1.default.getUser({ role, id });
     (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message, data: result === null || result === void 0 ? void 0 : result.data });
 });
 exports.default = UserController;
