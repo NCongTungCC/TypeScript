@@ -72,5 +72,9 @@ class AuthService {
             };
         });
     }
+    static logout() {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
 }
 exports.default = AuthService;

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import AuthController from "../auth/auth.controller";
 const router = Router();
+
 /**
  * @swagger
  * /signup:

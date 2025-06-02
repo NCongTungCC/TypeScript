@@ -31,7 +31,6 @@ class AuthService {
                 message : 'Đăng ký thất bại',
             }
         }
-
         await newUser.save();
         return {
             code : 200,
@@ -60,6 +59,9 @@ class AuthService {
           message : 'Đăng nhập thành công',
           accessToken : accessToken,
        }
+    }
+    static async logout() {
+        
     }
 }
 
