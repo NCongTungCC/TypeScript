@@ -257,4 +257,97 @@ router.delete('/users/:id', authentication_middleware_1.default, (0, authorizati
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
 router.post('/users', authentication_middleware_1.default, (0, authorization_middleware_1.premission)('admin'), (0, catchAsync_middleware_1.default)(user_controller_1.default.createUser));
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Sửa thông tin người dùng
+ *     description: Cho phép admin sửa thông tin người dùng (trừ mật khẩu)
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID của người dùng cần sửa
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: "congtung"
+ *               email:
+ *                 type: string
+ *                 example: "tung@gmail.com"
+ *               avatar:
+ *                 type: string
+ *                 example: "https://example.com/avatar.jpg"
+ *               gender:
+ *                 type: string
+ *                 enum: [male, female, other]
+ *               birthday:
+ *                 type: string
+ *                 format: date
+ *                 example: "2000-01-01"
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Sửa thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: "Sửa thành công"
+ *       404:
+ *         description: Không tìm thấy người dùng
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 404
+ *                 message:
+ *                   type: string
+ *                   example: "Không tìm thấy người dùng"
+ *       400:
+ *         description: Email đã tồn tại
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: "Email đã được sử dụng"
+ *       500:
+ *         description: Lỗi máy chủ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: "Đã xảy ra lỗi phía máy chủ"
+ */
+router.put('/users/:id', authentication_middleware_1.default, (0, authorization_middleware_1.premission)('admin'), (0, catchAsync_middleware_1.default)(user_controller_1.default.updateUser));
 exports.default = router;

@@ -85,5 +85,22 @@ class UserService {
             };
         });
     }
+    static updateUser(id, bodyData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_entity_1.User.findOne({ where: { id: id } });
+            if (!user) {
+                return {
+                    code: 404,
+                    message: 'Không tìm thấy người dùng',
+                };
+            }
+            const updateData = Object.assign(Object.assign({}, bodyData), { gender: bodyData.gender });
+            yield user_entity_1.User.update({ id: id }, updateData);
+            return {
+                code: 200,
+                message: 'Cập nhật thành công',
+            };
+        });
+    }
 }
 exports.default = UserService;

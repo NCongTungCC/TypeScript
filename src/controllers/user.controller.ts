@@ -21,6 +21,13 @@ class UserController {
         const result = await UserService.deleteUser({id : userId});
         sendResponse(res, { code: result?.code, message: result?.message});
     }
+
+    static updateUser = async (req : Request, res : Response) => {
+        const {id} = req.params;
+        const userId = Number(id)
+        const result = await UserService.updateUser(userId, req.body);
+        sendResponse(res, { code: result?.code, message: result?.message});
+    }
 }
 
 export default UserController;

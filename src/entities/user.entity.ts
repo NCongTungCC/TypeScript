@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
-import { IsEmail, IsNotEmpty, Length, IsEnum, Matches } from 'class-validator';
+import { IsNotEmpty, Length, IsEnum, Matches } from 'class-validator';
+
 export enum Gender {
   MALE = 'male',
   FEMALE = 'female'

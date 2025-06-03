@@ -72,6 +72,25 @@ class UserService {
             message : 'Xóa thành công'
         }
     }
+
+    static async updateUser(id : number , bodyData : Partial<UserInterface>) {
+        const user = await User.findOne({where : { id : id}});
+        if(!user) {
+            return {
+                code : 404,
+                message : 'Không tìm thấy người dùng',
+            }
+        }
+        const updateData = {
+            ...bodyData,
+            gender: bodyData.gender as any
+        };
+        await User.update({id : id}, updateData);
+        return {
+            code : 200,
+            message : 'Cập nhật thành công',
+        }
+    }
 }
 
 export default UserService
