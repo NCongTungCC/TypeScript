@@ -9,6 +9,12 @@ class UserController {
         const result = await UserService.getUser({ role, id });
         sendResponse(res, { code: result?.code, message: result?.message, data: result?.data });
     };
+    static deleteUser = async (req : Request, res : Response) => {
+        const {id} = req.params;
+        const userId = Number(id);
+        const result = await UserService.deleteUser({id : userId});
+        sendResponse(res, { code: result?.code, message: result?.message});
+    }
 }
 
 export default UserController;

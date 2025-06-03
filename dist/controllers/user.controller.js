@@ -25,4 +25,10 @@ UserController.getUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
     const result = yield user_service_1.default.getUser({ role, id });
     (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message, data: result === null || result === void 0 ? void 0 : result.data });
 });
+UserController.deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const userId = Number(id);
+    const result = yield user_service_1.default.deleteUser({ id: userId });
+    (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
+});
 exports.default = UserController;

@@ -32,5 +32,21 @@ class UserService {
             };
         });
     }
+    static deleteUser(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ id }) {
+            const users = yield user_entity_1.User.findOne({ where: { id: id } });
+            if (!users) {
+                return {
+                    code: 404,
+                    message: 'Không tìm thấy người dùng',
+                };
+            }
+            yield user_entity_1.User.delete({ id: id });
+            return {
+                code: 200,
+                message: 'Xóa thành công'
+            };
+        });
+    }
 }
 exports.default = UserService;

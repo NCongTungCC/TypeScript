@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
-import { IsEmail, IsNotEmpty, Length, IsEnum } from 'class-validator';
+import { IsEmail, IsNotEmpty, Length, IsEnum, Matches } from 'class-validator';
 export enum Gender {
   MALE = 'male',
   FEMALE = 'female'
@@ -24,6 +24,9 @@ export class User extends BaseEntity {
         @Column({ unique: true })
         @IsEmail({}, {message : 'Email không hợp lệ'})
         @IsNotEmpty({message : 'Email không được để trống'})
+        @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, {
+          message: 'Email phải đúng định dạng (ví dụ: example@domain.com)'
+        })
         email!: string;
 
         @Column()

@@ -21,6 +21,20 @@ class UserService {
             data : users,
         }
     }
+    static async deleteUser({id} : Partial<UserInterface>) {
+        const users = await User.findOne({where : {id : id}});
+        if(!users) { 
+            return {
+                code : 404,
+                message : 'Không tìm thấy người dùng',
+            }
+        }
+        await User.delete({id : id});
+        return {
+            code : 200,
+            message : 'Xóa thành công'
+        }
+    }
 }
 
 export default UserService

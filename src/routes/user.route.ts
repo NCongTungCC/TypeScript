@@ -2,6 +2,7 @@ import { Router } from "express";
 import UserController from "../controllers/user.controller";
 import authentication from "../middlewares/authentication.middleware";
 import catchAsync from "../middlewares/catchAsync.middleware";
+import { premission } from "../middlewares/authorization.middleware";
 
 const router = Router();
 /**
@@ -82,5 +83,64 @@ const router = Router();
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
 router.get('/users', authentication, catchAsync(UserController.getUser));
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Xóa người dùng
+ *     description: Xóa người dùng theo ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID của người dùng cần xóa
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Xóa thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: integer
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: "Xóa người dùng thành công"
+ *       404:
+ *         description: Không tìm thấy người dùng
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: integer
+ *                   example: 404
+ *                 message:
+ *                   type: string
+ *                   example: "Không tìm thấy người dùng"
+ *       500:
+ *         description: Lỗi máy chủ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: integer
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: "Đã xảy ra lỗi phía máy chủ"
+ */
+
+router.delete('/users/:id', authentication, premission('admin'), catchAsync(UserController.deleteUser));
 
 export default router;
