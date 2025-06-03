@@ -3,7 +3,6 @@ import { User } from "../entities/user.entity";
 import { hashPassword } from '../helpers/password.helper';
 import { Validate } from '../helpers/validate.helper';
 
-
 class UserService {
     static async getUser({id, role} : Partial<UserInterface>) {
         const users = await User.createQueryBuilder('user')

@@ -9,9 +9,9 @@ const authentication = (req: Request, res: Response, next: NextFunction): void =
 
         if (!accessToken) {
           res.status(200).json({
-            code: 401,
+            code: 404,
             status: "Error",
-            message: "Token không hợp lệ.",
+            message: "Không tìm thấy token",
           });
           return; 
         }

@@ -76,14 +76,8 @@ class AuthService {
             };
         });
     }
-    static logout(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ token }) {
-            if (!token) {
-                return {
-                    code: 401,
-                    message: 'Bạn chưa đăng nhập',
-                };
-            }
+    static logout() {
+        return __awaiter(this, void 0, void 0, function* () {
             return {
                 code: 200,
                 message: 'Đăng xuất thành công',

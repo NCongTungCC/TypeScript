@@ -63,13 +63,7 @@ class AuthService {
           accessToken : accessToken,
        }
     }
-    static async logout({token} : {token: string}) {
-        if (!token) {
-            return {
-                code: 401,
-                message: 'Bạn chưa đăng nhập',
-            }
-        }
+    static async logout() {
         return {
             code: 200,
             message: 'Đăng xuất thành công',

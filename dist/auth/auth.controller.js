@@ -24,13 +24,17 @@ AuthController.signup = (req, res) => __awaiter(void 0, void 0, void 0, function
 });
 AuthController.login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.default.login(req.body);
+    res.cookie('jwt', result.accessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000
+    });
     (0, response_middleware_1.default)(res, { code: result.code, message: result.message, accessToken: result.accessToken });
 });
 AuthController.logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
-    const token = (_b = req.headers.authorization) === null || _b === void 0 ? void 0 : _b.split(' ')[1];
-    const result = yield auth_service_1.default.logout({ token });
-    res.clearCookie('accessToken');
+    const result = yield auth_service_1.default.logout();
+    res.clearCookie('jwt');
     (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
 });
 AuthController.changePasswod = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

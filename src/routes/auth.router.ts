@@ -241,7 +241,7 @@ router.post('/login', catchAsync(AuthController.login));
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
 
-router.get('/logout',authentication, catchAsync(AuthController.logout));
+router.get('/logout', authentication, catchAsync(AuthController.logout));
 
 /**
  * @swagger

@@ -255,7 +255,7 @@ router.delete('/users/:id', authentication, premission('admin'), catchAsync(User
  *                   type: string
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
-router.post('/users',authentication, premission('admin'), catchAsync(UserController.createUser));
+router.post('/users', authentication, premission('admin'), catchAsync(UserController.createUser));
 
 /**
  * @swagger
