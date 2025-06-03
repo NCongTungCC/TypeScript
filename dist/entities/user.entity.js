@@ -41,7 +41,7 @@ __decorate([
     (0, class_validator_1.IsEmail)({}, { message: 'Email không hợp lệ' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'Email không được để trống' }),
     (0, class_validator_1.Matches)(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, {
-        message: 'Email phải đúng định dạng (ví dụ: example@domain.com)'
+        message: 'Email phải đúng định dạng (ví dụ: example@gmail.com)'
     }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);

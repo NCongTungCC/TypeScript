@@ -12,13 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_entity_1 = require("../entities/user.entity");
 const password_helper_1 = require("../helpers/password.helper");
 const generateToken_helper_1 = require("../helpers/generateToken.helper");
-const validate_ulti_1 = require("../ultis/validate.ulti");
+const validate_helper_1 = require("../helpers/validate.helper");
 class AuthService {
     static signup(payload) {
         return __awaiter(this, void 0, void 0, function* () {
             const { username, email, password, avatar, gender, birthday } = payload;
-            const users = yield user_entity_1.User.findOne({ where: { email: email } });
-            if (users) {
+            const user = yield user_entity_1.User.findOne({ where: { email: email } });
+            if (user) {
                 return {
                     code: 400,
                     message: "Email đã tồn tại.",
@@ -35,7 +35,7 @@ class AuthService {
                 role,
                 birthday: new Date(birthday),
             });
-            yield (0, validate_ulti_1.validateAndThrowIfInvalid)(newUser);
+            yield (0, validate_helper_1.Validate)(newUser);
             if (!newUser) {
                 return {
                     code: 400,
@@ -54,21 +54,21 @@ class AuthService {
     static login(payload) {
         return __awaiter(this, void 0, void 0, function* () {
             const { email, password } = payload;
-            const users = yield user_entity_1.User.findOne({ where: { email: email } });
-            if (!users) {
+            const user = yield user_entity_1.User.findOne({ where: { email: email } });
+            if (!user) {
                 return {
                     code: 404,
                     message: 'Không tìm thấy tài khoản',
                 };
             }
-            const isMatch = yield (0, password_helper_1.comparePassword)(password, users.password);
+            const isMatch = yield (0, password_helper_1.comparePassword)(password, user.password);
             if (!isMatch) {
                 return {
                     code: 400,
                     message: 'Mật khẩu không chính xác',
                 };
             }
-            const accessToken = yield (0, generateToken_helper_1.generateToken)(users);
+            const accessToken = yield (0, generateToken_helper_1.generateToken)(user);
             return {
                 code: 200,
                 message: 'Đăng nhập thành công',
@@ -92,14 +92,14 @@ class AuthService {
     }
     static changePass(_a) {
         return __awaiter(this, arguments, void 0, function* ({ id, password, newPassword, confirmPassword }) {
-            const users = yield user_entity_1.User.findOne({ where: { id: id } });
-            if (!users) {
+            const user = yield user_entity_1.User.findOne({ where: { id: id } });
+            if (!user) {
                 return {
                     code: 404,
                     message: 'Không tìm thấy người dùng',
                 };
             }
-            const isMatch = yield (0, password_helper_1.comparePassword)(password, users.password);
+            const isMatch = yield (0, password_helper_1.comparePassword)(password, user.password);
             if (!isMatch) {
                 return {
                     code: 400,
@@ -112,11 +112,11 @@ class AuthService {
                     message: 'Mật khẩu không trùng khớp',
                 };
             }
-            users.password = newPassword;
-            yield (0, validate_ulti_1.validateAndThrowIfInvalid)(users);
+            user.password = newPassword;
+            yield (0, validate_helper_1.Validate)(user);
             const hashedPassword = yield (0, password_helper_1.hashPassword)(newPassword);
-            users.password = hashedPassword;
-            yield users.save();
+            user.password = hashedPassword;
+            yield user.save();
             return {
                 code: 200,
                 message: 'Đổi mật khẩu thành công',

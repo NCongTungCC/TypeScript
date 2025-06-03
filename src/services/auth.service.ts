@@ -2,13 +2,13 @@ import { User } from "../entities/user.entity";
 import { UserInterface } from "../interfaces/user.interface";
 import { hashPassword, comparePassword } from "../helpers/password.helper";
 import { generateToken } from "../helpers/generateToken.helper";
-import { validateAndThrowIfInvalid } from "../ultis/validate.ulti";
+import { Validate } from "../helpers/validate.helper";
 
 class AuthService {
     static async signup(payload : Partial<UserInterface>) {
         const {username, email, password, avatar, gender, birthday} = payload;
-        const users = await User.findOne({ where: { email: email } });
-        if(users) {
+        const user = await User.findOne({ where: { email: email } });
+        if(user) {
             return {
                 code: 400,
                 message: "Email đã tồn tại.",
@@ -25,7 +25,7 @@ class AuthService {
             role,
             birthday : new Date(birthday as Date),
         })
-        await validateAndThrowIfInvalid(newUser);
+        await Validate(newUser);
         if(!newUser) {
             return {
                 code : 400,
@@ -42,21 +42,21 @@ class AuthService {
     }
     static async login(payload : Partial<UserInterface>) {
         const {email, password} = payload;
-        const users = await User.findOne({where : {email : email}});
-        if(!users) {
+        const user = await User.findOne({where : {email : email}});
+        if(!user) {
             return {
                 code : 404,
                 message : 'Không tìm thấy tài khoản',
             }
         }       
-        const isMatch = await comparePassword(password as string, users.password);
+        const isMatch = await comparePassword(password as string, user.password);
         if(!isMatch) {
             return {
                 code : 400,
                 message : 'Mật khẩu không chính xác',
             }
         }
-       const accessToken = await generateToken(users);
+       const accessToken = await generateToken(user);
        return {
           code : 200,
           message : 'Đăng nhập thành công',
@@ -76,14 +76,14 @@ class AuthService {
         }
     }
     static async changePass({id, password, newPassword, confirmPassword} : any) {
-        const users = await User.findOne({where : { id : id }});
-        if(!users) {
+        const user = await User.findOne({where : { id : id }});
+        if(!user) {
             return {
                 code : 404,
                 message : 'Không tìm thấy người dùng',
             }
         }
-        const isMatch = await comparePassword(password, users.password);
+        const isMatch = await comparePassword(password, user.password);
         if(!isMatch) {
             return {
                 code : 400,
@@ -96,11 +96,11 @@ class AuthService {
                 message : 'Mật khẩu không trùng khớp',
             }
         }
-        users.password = newPassword;
-        await validateAndThrowIfInvalid(users);
+        user.password = newPassword;
+        await Validate(user);
         const hashedPassword = await hashPassword(newPassword);
-        users.password = hashedPassword as string;
-        await users.save();
+        user.password = hashedPassword as string;
+        await user.save();
         return {
             code : 200,
             message : 'Đổi mật khẩu thành công',
