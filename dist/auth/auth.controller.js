@@ -23,18 +23,11 @@ AuthController.signup = (req, res) => __awaiter(void 0, void 0, void 0, function
     (0, response_middleware_1.default)(res, { code: result.code, message: result.message, data: result.data });
 });
 AuthController.login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield auth_service_1.default.login(req.body);
-    res.cookie('jwt', result.accessToken, {
-        httpOnly: true,
-        secure: false,
-        sameSite: 'lax',
-        maxAge: 24 * 60 * 60 * 1000
-    });
+    const result = yield auth_service_1.default.login(res, req.body);
     (0, response_middleware_1.default)(res, { code: result.code, message: result.message, accessToken: result.accessToken });
 });
 AuthController.logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield auth_service_1.default.logout();
-    res.clearCookie('jwt');
+    const result = yield auth_service_1.default.logout(res);
     (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
 });
 AuthController.changePasswod = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

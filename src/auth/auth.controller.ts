@@ -9,19 +9,12 @@ class AuthController {
     }
 
     static login = async (req : Request, res : Response) => {
-        const result = await AuthService.login(req.body);
-        res.cookie('jwt', result.accessToken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'lax',
-            maxAge: 24 * 60 * 60 * 1000
-        });
+        const result = await AuthService.login(res, req.body);
         sendResponse(res, {code : result.code, message : result.message, accessToken : result.accessToken});
     }
 
     static logout = async (req: Request, res: Response) => {
-        const result = await AuthService.logout();
-        res.clearCookie('jwt');
+        const result = await AuthService.logout(res);
         sendResponse(res, {code: result?.code, message: result?.message});
     }
 

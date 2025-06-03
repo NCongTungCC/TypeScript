@@ -3,6 +3,7 @@ import { UserInterface } from "../interfaces/user.interface";
 import { hashPassword, comparePassword } from "../helpers/password.helper";
 import { generateToken } from "../helpers/generateToken.helper";
 import { Validate } from "../helpers/validate.helper";
+import { Response } from "express";
 
 class AuthService {
     static async signup(payload : Partial<UserInterface>) {
@@ -40,7 +41,7 @@ class AuthService {
             data : newUser,
         }
     }
-    static async login(payload : Partial<UserInterface>) {
+    static async login(res : Response, payload : Partial<UserInterface>) {
         const {email, password} = payload;
         const user = await User.findOne({where : {email : email}});
         if(!user) {
@@ -56,14 +57,21 @@ class AuthService {
                 message : 'Mật khẩu không chính xác',
             }
         }
-       const accessToken = await generateToken(user);
+        const accessToken = await generateToken(user);
+        res.cookie('jwt', accessToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000
+        });
        return {
           code : 200,
           message : 'Đăng nhập thành công',
           accessToken : accessToken,
        }
     }
-    static async logout() {
+    static async logout(res : Response) {
+        res.clearCookie('jwt');
         return {
             code: 200,
             message: 'Đăng xuất thành công',

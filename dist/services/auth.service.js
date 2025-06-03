@@ -51,7 +51,7 @@ class AuthService {
             };
         });
     }
-    static login(payload) {
+    static login(res, payload) {
         return __awaiter(this, void 0, void 0, function* () {
             const { email, password } = payload;
             const user = yield user_entity_1.User.findOne({ where: { email: email } });
@@ -69,6 +69,12 @@ class AuthService {
                 };
             }
             const accessToken = yield (0, generateToken_helper_1.generateToken)(user);
+            res.cookie('jwt', accessToken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'lax',
+                maxAge: 24 * 60 * 60 * 1000
+            });
             return {
                 code: 200,
                 message: 'Đăng nhập thành công',
@@ -76,8 +82,9 @@ class AuthService {
             };
         });
     }
-    static logout() {
+    static logout(res) {
         return __awaiter(this, void 0, void 0, function* () {
+            res.clearCookie('jwt');
             return {
                 code: 200,
                 message: 'Đăng xuất thành công',
