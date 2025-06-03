@@ -15,7 +15,6 @@ const authentication = (req: Request, res: Response, next: NextFunction): void =
     });
     return; 
   }
-
   jwt.verify(accessToken, secret, (err, user: any) => {
     if (err) {
       res.status(200).json({

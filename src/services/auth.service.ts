@@ -5,7 +5,8 @@ import { generateToken } from "../helpers/generateToken.helper";
 import { validateAndThrowIfInvalid } from "../ultis/validate.ulti";
 
 class AuthService {
-    static async signup({username, email, password, avatar, gender, birthday} : Partial<UserInterface>) {
+    static async signup(payload : Partial<UserInterface>) {
+        const {username, email, password, avatar, gender, birthday} = payload;
         const users = await User.findOne({ where: { email: email } });
         if(users) {
             return {
@@ -39,7 +40,8 @@ class AuthService {
             data : newUser,
         }
     }
-    static async login({email, password} : Partial<UserInterface>) {
+    static async login(payload : Partial<UserInterface>) {
+        const {email, password} = payload;
         const users = await User.findOne({where : {email : email}});
         if(!users) {
             return {

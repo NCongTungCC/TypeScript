@@ -4,14 +4,12 @@ import AuthService from '../services/auth.service';
 
 class AuthController {
     static signup = async (req : Request, res : Response) => {
-        const {username, email, password, avatar, gender, birthday} = req.body;
-        const result = await AuthService.signup({username, email, password, avatar, gender, birthday});
+        const result = await AuthService.signup(req.body);
         sendResponse(res, {code : result.code, message : result.message, data : result.data});
     }
 
     static login = async (req : Request, res : Response) => {
-        const {email, password} = req.body;
-        const result = await AuthService.login({email, password});
+        const result = await AuthService.login(req.body);
         sendResponse(res, {code : result.code, message : result.message, accessToken : result.accessToken});
     }
 

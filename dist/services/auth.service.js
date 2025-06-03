@@ -14,8 +14,9 @@ const password_helper_1 = require("../helpers/password.helper");
 const generateToken_helper_1 = require("../helpers/generateToken.helper");
 const validate_ulti_1 = require("../ultis/validate.ulti");
 class AuthService {
-    static signup(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ username, email, password, avatar, gender, birthday }) {
+    static signup(payload) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { username, email, password, avatar, gender, birthday } = payload;
             const users = yield user_entity_1.User.findOne({ where: { email: email } });
             if (users) {
                 return {
@@ -50,8 +51,9 @@ class AuthService {
             };
         });
     }
-    static login(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ email, password }) {
+    static login(payload) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { email, password } = payload;
             const users = yield user_entity_1.User.findOne({ where: { email: email } });
             if (!users) {
                 return {

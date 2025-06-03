@@ -19,13 +19,11 @@ class AuthController {
 }
 _a = AuthController;
 AuthController.signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { username, email, password, avatar, gender, birthday } = req.body;
-    const result = yield auth_service_1.default.signup({ username, email, password, avatar, gender, birthday });
+    const result = yield auth_service_1.default.signup(req.body);
     (0, response_middleware_1.default)(res, { code: result.code, message: result.message, data: result.data });
 });
 AuthController.login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
-    const result = yield auth_service_1.default.login({ email, password });
+    const result = yield auth_service_1.default.login(req.body);
     (0, response_middleware_1.default)(res, { code: result.code, message: result.message, accessToken: result.accessToken });
 });
 AuthController.logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
