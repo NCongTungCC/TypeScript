@@ -4,8 +4,6 @@ import { hashPassword, comparePassword } from "../helpers/password.helper";
 import { generateToken } from "../helpers/generateToken.helper";
 import { validateAndThrowIfInvalid } from "../ultis/validate.ulti";
 
-import { Request, Response } from "express";
-
 class AuthService {
     static async signup({username, email, password, avatar, gender, birthday} : Partial<UserInterface>) {
         const users = await User.findOne({ where: { email: email } });
@@ -36,7 +34,7 @@ class AuthService {
         newUser.password = await hashPassword(password as string) as string;
         await newUser.save();
         return {
-            code : 200,
+            code : 201,
             message : 'Đăng ký thành công',
             data : newUser,
         }
@@ -63,11 +61,49 @@ class AuthService {
           accessToken : accessToken,
        }
     }
-    static async logout(req: Request, res: Response) {
+    static async logout({token} : {token: string}) {
+        if (!token) {
+            return {
+                code: 401,
+                message: 'Bạn chưa đăng nhập',
+            }
+        }
         return {
             code: 200,
             message: 'Đăng xuất thành công',
         }
-    }}
+    }
+    static async changePass({id, password, newPassword, confirmPassword} : any) {
+        const users = await User.findOne({where : { id : id }});
+        if(!users) {
+            return {
+                code : 404,
+                message : 'Không tìm thấy người dùng',
+            }
+        }
+        const isMatch = await comparePassword(password, users.password);
+        if(!isMatch) {
+            return {
+                code : 400,
+                message : 'Sai mật khẩu cũ',
+            }
+        }
+        if(newPassword !== confirmPassword) {
+            return {
+                code : 400,
+                message : 'Mật khẩu không trùng khớp',
+            }
+        }
+        users.password = newPassword;
+        await validateAndThrowIfInvalid(users);
+        const hashedPassword = await hashPassword(newPassword);
+        users.password = hashedPassword as string;
+        await users.save();
+        return {
+            code : 200,
+            message : 'Đổi mật khẩu thành công',
+        }
+    }
+}
 
 export default AuthService

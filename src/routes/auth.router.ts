@@ -37,7 +37,7 @@ const router = Router();
  *                 format: date
  *                 example: "2002-02-01"
  *     responses:
- *       200:
+ *       201:
  *         description: Đăng ký thành công
  *         content:
  *           application/json:
@@ -46,7 +46,7 @@ const router = Router();
  *               properties:
  *                 code:
  *                   type: number
- *                   example: 200
+ *                   example: 201
  *                 message:
  *                   type: string
  *                   example: "Đăng ký thành công"
@@ -213,6 +213,19 @@ router.post('/login', catchAsync(AuthController.login));
  *                 message:
  *                   type: string
  *                   example: "Đăng xuất thành công"
+ *       401:
+ *         description: Bạn chưa đăng nhập
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 401
+ *                 message:
+ *                   type: string
+ *                   example: "Bạn chưa đăng nhập"
  *       500:
  *         description: Lỗi máy chủ
  *         content:
@@ -229,5 +242,83 @@ router.post('/login', catchAsync(AuthController.login));
  */
 
 router.get('/logout',authentication, catchAsync(AuthController.logout));
+
+/**
+ * @swagger
+ * /changepass:
+ *   put:
+ *     summary: Đổi mật khẩu
+ *     description: Đổi mật khẩu
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 example: "123456"
+ *               newPassword:
+ *                 type: string
+ *                 example: "1234567"
+ *               confirmPassword:
+ *                 type: string
+ *                 example: "1234567"
+ *     responses:
+ *       200:
+ *         description: Đổi mật khẩu thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: "Đổi mật khẩu thành công"
+ *       400:
+ *         description: Dữ liệu đầu vào không hợp lệ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: "Sai mật khẩu cũ hoặc mật khẩu mới không trùng khớp"
+ *       404:
+ *         description: Không tìm thấy tài khoản
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 404
+ *                 message:
+ *                   type: string
+ *                   example: "Không tìm thấy tài khoản"
+ *       500:
+ *         description: Lỗi máy chủ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 500
+ *                 message:
+ *                   type: string
+ *                   example: "Đã xảy ra lỗi phía máy chủ"
+ */
+router.put('/changepass', authentication, catchAsync(AuthController.changePasswod));
 
 export default router;

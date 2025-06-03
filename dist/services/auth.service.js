@@ -44,7 +44,7 @@ class AuthService {
             newUser.password = (yield (0, password_helper_1.hashPassword)(password));
             yield newUser.save();
             return {
-                code: 200,
+                code: 201,
                 message: 'Đăng ký thành công',
                 data: newUser,
             };
@@ -74,11 +74,50 @@ class AuthService {
             };
         });
     }
-    static logout(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    static logout(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ token }) {
+            if (!token) {
+                return {
+                    code: 401,
+                    message: 'Bạn chưa đăng nhập',
+                };
+            }
             return {
                 code: 200,
                 message: 'Đăng xuất thành công',
+            };
+        });
+    }
+    static changePass(_a) {
+        return __awaiter(this, arguments, void 0, function* ({ id, password, newPassword, confirmPassword }) {
+            const users = yield user_entity_1.User.findOne({ where: { id: id } });
+            if (!users) {
+                return {
+                    code: 404,
+                    message: 'Không tìm thấy người dùng',
+                };
+            }
+            const isMatch = yield (0, password_helper_1.comparePassword)(password, users.password);
+            if (!isMatch) {
+                return {
+                    code: 400,
+                    message: 'Sai mật khẩu cũ',
+                };
+            }
+            if (newPassword !== confirmPassword) {
+                return {
+                    code: 400,
+                    message: 'Mật khẩu không trùng khớp',
+                };
+            }
+            users.password = newPassword;
+            yield (0, validate_ulti_1.validateAndThrowIfInvalid)(users);
+            const hashedPassword = yield (0, password_helper_1.hashPassword)(newPassword);
+            users.password = hashedPassword;
+            yield users.save();
+            return {
+                code: 200,
+                message: 'Đổi mật khẩu thành công',
             };
         });
     }

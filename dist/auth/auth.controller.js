@@ -29,7 +29,17 @@ AuthController.login = (req, res) => __awaiter(void 0, void 0, void 0, function*
     (0, response_middleware_1.default)(res, { code: result.code, message: result.message, accessToken: result.accessToken });
 });
 AuthController.logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield auth_service_1.default.logout(req, res);
+    var _b;
+    const token = (_b = req.headers.authorization) === null || _b === void 0 ? void 0 : _b.split(' ')[1];
+    const result = yield auth_service_1.default.logout({ token });
+    res.clearCookie('accessToken');
+    (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
+});
+AuthController.changePasswod = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    const id = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
+    const { password, newPassword, confirmPassword } = req.body;
+    const result = yield auth_service_1.default.changePass({ id, password, newPassword, confirmPassword });
     (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
 });
 exports.default = AuthController;

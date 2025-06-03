@@ -16,8 +16,17 @@ class AuthController {
     }
 
     static logout = async (req: Request, res: Response) => {
-        const result = await AuthService.logout(req, res);
+        const token = req.headers.authorization?.split(' ')[1] as string;
+        const result = await AuthService.logout({token});
+        res.clearCookie('accessToken');
         sendResponse(res, {code: result?.code, message: result?.message});
+    }
+
+    static changePasswod = async (req : Request, res : Response) => {
+        const id = req.user?.id;
+        const { password, newPassword, confirmPassword } = req.body;
+        const result = await AuthService.changePass({id, password, newPassword, confirmPassword});
+        sendResponse(res, {code: result?.code, message: result?.message });
     }
 }
 
