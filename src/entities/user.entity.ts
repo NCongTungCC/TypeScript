@@ -22,7 +22,6 @@ export class User extends BaseEntity {
         username!: string;
 
         @Column({ unique: true })
-        @IsEmail({}, {message : 'Email không hợp lệ'})
         @IsNotEmpty({message : 'Email không được để trống'})
         @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, {
           message: 'Email phải đúng định dạng (ví dụ: example@gmail.com)'

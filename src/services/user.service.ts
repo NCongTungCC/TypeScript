@@ -1,5 +1,8 @@
+import { UserInterface } from './../interfaces/user.interface';
 import { User } from "../entities/user.entity";
-import { UserInterface } from "../interfaces/user.interface";
+import { hashPassword } from '../helpers/password.helper';
+import { Validate } from '../helpers/validate.helper';
+
 
 class UserService {
     static async getUser({id, role} : Partial<UserInterface>) {
@@ -21,6 +24,40 @@ class UserService {
             data : users,
         }
     }
+    static async createUser(payload : Partial<UserInterface>) {
+        const {username, email, password, avatar, role, gender, birthday} = payload;
+        const user = await User.findOne({where : {email : email}});
+        if(user) {
+            return {
+                code : 400,
+                message : 'Email đã tồn tại'
+            }
+        }
+        const newUser = await User.create({
+                username,
+                email,
+                password,
+                avatar,
+                gender : gender as any,
+                role,
+                birthday : new Date(birthday as Date),
+        })
+        await Validate(newUser);
+        if(!newUser) {
+            return {
+                code : 400,
+                message : 'Đăng ký thất bại',
+            }
+        }
+        newUser.password = await hashPassword(password as string) as string;
+        await newUser.save();
+        return {
+            code : 201,
+            message : 'Đăng ký thành công',
+            data : newUser,
+        }
+    }
+
     static async deleteUser({id} : Partial<UserInterface>) {
         const users = await User.findOne({where : {id : id}});
         if(!users) { 

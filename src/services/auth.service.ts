@@ -12,7 +12,7 @@ class AuthService {
             return {
                 code: 400,
                 message: "Email đã tồn tại.",
-            };
+            }
         }
         const count = await User.count();
         const role = count === 0 ? "admin" : "user"; 
