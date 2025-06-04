@@ -8,6 +8,7 @@ const router = Router();
  * @swagger
  * /signup:
  *   post:
+ *     tags: ['Auth']
  *     summary: Đăng ký
  *     description: Đăng ký tài khoản
  *     requestBody:
@@ -72,19 +73,6 @@ const router = Router();
  *                       type: string
  *                       format: date
  *                       example: "2002-02-01"
- *       404:
- *         description: Dữ liệu không hợp lệ
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 code:
- *                   type: number
- *                   example: 404
- *                 message:
- *                   type: string
- *                   example: "Dữ liệu đầu vào không hợp lệ"
  *       400:
  *         description: Email đã tồn tại
  *         content:
@@ -118,6 +106,7 @@ router.post('/signup', catchAsync(AuthController.signup));
  * @swagger
  * /login:
  *   post:
+ *     tags: ['Auth']
  *     summary: Đăng nhập
  *     description: Đăng nhập tài khoản
  *     requestBody:
@@ -197,6 +186,7 @@ router.post('/login', catchAsync(AuthController.login));
  * @swagger
  * /logout:
  *   get:
+ *     tags: ['Auth']
  *     summary: Đăng xuất
  *     description: Đăng xuất tài khoản
  *     responses:
@@ -247,6 +237,7 @@ router.get('/logout', authentication, catchAsync(AuthController.logout));
  * @swagger
  * /changepass:
  *   put:
+ *     tags: ['Auth']
  *     summary: Đổi mật khẩu
  *     description: Đổi mật khẩu
  *     requestBody:
@@ -320,5 +311,6 @@ router.get('/logout', authentication, catchAsync(AuthController.logout));
  *                   example: "Đã xảy ra lỗi phía máy chủ"
  */
 router.put('/changepass', authentication, catchAsync(AuthController.changePasswod));
+
 
 export default router;

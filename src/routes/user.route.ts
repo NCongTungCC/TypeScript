@@ -9,6 +9,7 @@ const router = Router();
  * @swagger
  * /users:
  *   get:
+ *     tags: ['User']
  *     summary: Lấy danh sách người dùng
  *     description: Lấy danh sách người dùng theo quyền truy cập
  *     security:
@@ -88,6 +89,7 @@ router.get('/users', authentication, catchAsync(UserController.getUser));
  * @swagger
  * /users/{id}:
  *   delete:
+ *     tags: ['User']
  *     summary: Xóa người dùng
  *     description: Xóa người dùng theo ID
  *     parameters:
@@ -147,8 +149,9 @@ router.delete('/users/:id', authentication, premission('admin'), catchAsync(User
  * @swagger
  * /users:
  *   post:
- *     summary: Admin tạo tài khoản
- *     description: Admin tạo tài khoản
+ *     tags: ['User']
+ *     summary: ADMIN thêm người dùng
+ *     description: ADMIN thêm người dùng
  *     requestBody:
  *       required: true
  *       content:
@@ -261,6 +264,7 @@ router.post('/users', authentication, premission('admin'), catchAsync(UserContro
  * @swagger
  * /users/{id}:
  *   put:
+ *     tags: ['User']
  *     summary: Sửa thông tin người dùng
  *     description: Cho phép admin sửa thông tin người dùng (trừ mật khẩu)
  *     parameters:

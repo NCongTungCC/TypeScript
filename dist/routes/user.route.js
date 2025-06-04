@@ -13,6 +13,7 @@ const router = (0, express_1.Router)();
  * @swagger
  * /users:
  *   get:
+ *     tags: ['User']
  *     summary: Lấy danh sách người dùng
  *     description: Lấy danh sách người dùng theo quyền truy cập
  *     security:
@@ -91,6 +92,7 @@ router.get('/users', authentication_middleware_1.default, (0, catchAsync_middlew
  * @swagger
  * /users/{id}:
  *   delete:
+ *     tags: ['User']
  *     summary: Xóa người dùng
  *     description: Xóa người dùng theo ID
  *     parameters:
@@ -148,8 +150,9 @@ router.delete('/users/:id', authentication_middleware_1.default, (0, authorizati
  * @swagger
  * /users:
  *   post:
- *     summary: Admin tạo tài khoản
- *     description: Admin tạo tài khoản
+ *     tags: ['User']
+ *     summary: ADMIN thêm người dùng
+ *     description: ADMIN thêm người dùng
  *     requestBody:
  *       required: true
  *       content:
@@ -261,6 +264,7 @@ router.post('/users', authentication_middleware_1.default, (0, authorization_mid
  * @swagger
  * /users/{id}:
  *   put:
+ *     tags: ['User']
  *     summary: Sửa thông tin người dùng
  *     description: Cho phép admin sửa thông tin người dùng (trừ mật khẩu)
  *     parameters:

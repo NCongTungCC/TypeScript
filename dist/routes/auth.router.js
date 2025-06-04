@@ -12,6 +12,7 @@ const router = (0, express_1.Router)();
  * @swagger
  * /signup:
  *   post:
+ *     tags: ['Auth']
  *     summary: Đăng ký
  *     description: Đăng ký tài khoản
  *     requestBody:
@@ -76,19 +77,6 @@ const router = (0, express_1.Router)();
  *                       type: string
  *                       format: date
  *                       example: "2002-02-01"
- *       404:
- *         description: Dữ liệu không hợp lệ
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 code:
- *                   type: number
- *                   example: 404
- *                 message:
- *                   type: string
- *                   example: "Dữ liệu đầu vào không hợp lệ"
  *       400:
  *         description: Email đã tồn tại
  *         content:
@@ -121,6 +109,7 @@ router.post('/signup', (0, catchAsync_middleware_1.default)(auth_controller_1.de
  * @swagger
  * /login:
  *   post:
+ *     tags: ['Auth']
  *     summary: Đăng nhập
  *     description: Đăng nhập tài khoản
  *     requestBody:
@@ -199,6 +188,7 @@ router.post('/login', (0, catchAsync_middleware_1.default)(auth_controller_1.def
  * @swagger
  * /logout:
  *   get:
+ *     tags: ['Auth']
  *     summary: Đăng xuất
  *     description: Đăng xuất tài khoản
  *     responses:
@@ -247,6 +237,7 @@ router.get('/logout', authentication_middleware_1.default, (0, catchAsync_middle
  * @swagger
  * /changepass:
  *   put:
+ *     tags: ['Auth']
  *     summary: Đổi mật khẩu
  *     description: Đổi mật khẩu
  *     requestBody:
