@@ -20,7 +20,7 @@ const hashPassword = (password) => __awaiter(void 0, void 0, void 0, function* (
         return hashedPassword;
     }
     catch (err) {
-        console.log('FAILED', err);
+        console.log('Failed', err);
     }
 });
 exports.hashPassword = hashPassword;
@@ -30,7 +30,7 @@ const comparePassword = (password, hashedPassword) => __awaiter(void 0, void 0, 
         return isMatch;
     }
     catch (err) {
-        console.log("FAILED", err);
+        console.log("Failed", err);
     }
 });
 exports.comparePassword = comparePassword;

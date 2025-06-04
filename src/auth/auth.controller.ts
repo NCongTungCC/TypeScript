@@ -1,5 +1,5 @@
 import {Response, Request} from 'express';
-import sendResponse from '../middlewares/response.middleware';
+import sendResponse from '../helpers/response.helper';
 import AuthService from '../services/auth.service';
 
 class AuthController {
@@ -22,7 +22,7 @@ class AuthController {
         const id = req.user?.id;
         const { password, newPassword, confirmPassword } = req.body;
         const result = await AuthService.changePass({id, password, newPassword, confirmPassword});
-        sendResponse(res, {code: result?.code, message: result?.message });
+        sendResponse(res, {code: result?.code, message: result?.message, accessToken : result.accessToken });
     }
 }
 

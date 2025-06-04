@@ -13,28 +13,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-const response_middleware_1 = __importDefault(require("../middlewares/response.middleware"));
+const response_helper_1 = __importDefault(require("../helpers/response.helper"));
 const auth_service_1 = __importDefault(require("../services/auth.service"));
 class AuthController {
 }
 _a = AuthController;
 AuthController.signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.default.signup(req.body);
-    (0, response_middleware_1.default)(res, { code: result.code, message: result.message, data: result.data });
+    (0, response_helper_1.default)(res, { code: result.code, message: result.message, data: result.data });
 });
 AuthController.login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.default.login(res, req.body);
-    (0, response_middleware_1.default)(res, { code: result.code, message: result.message, accessToken: result.accessToken });
+    (0, response_helper_1.default)(res, { code: result.code, message: result.message, accessToken: result.accessToken });
 });
 AuthController.logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.default.logout(res);
-    (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
+    (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
 });
 AuthController.changePasswod = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     const id = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
     const { password, newPassword, confirmPassword } = req.body;
     const result = yield auth_service_1.default.changePass({ id, password, newPassword, confirmPassword });
-    (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
+    (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message, accessToken: result.accessToken });
 });
 exports.default = AuthController;

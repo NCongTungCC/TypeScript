@@ -1,6 +1,6 @@
 import UserService from "../services/user.service";
 import { Response, Request } from "express";
-import sendResponse from "../middlewares/response.middleware";
+import sendResponse from "../helpers/response.helper";
 
 class UserController {
     static getUser = async (req: Request, res: Response) => {

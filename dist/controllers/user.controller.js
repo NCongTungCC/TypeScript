@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_service_1 = __importDefault(require("../services/user.service"));
-const response_middleware_1 = __importDefault(require("../middlewares/response.middleware"));
+const response_helper_1 = __importDefault(require("../helpers/response.helper"));
 class UserController {
 }
 _a = UserController;
@@ -23,22 +23,22 @@ UserController.getUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
     const role = (_b = req.user) === null || _b === void 0 ? void 0 : _b.role;
     const id = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
     const result = yield user_service_1.default.getUser({ role, id });
-    (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message, data: result === null || result === void 0 ? void 0 : result.data });
+    (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message, data: result === null || result === void 0 ? void 0 : result.data });
 });
 UserController.createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.default.createUser(req.body);
-    (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message, data: result === null || result === void 0 ? void 0 : result.data });
+    (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message, data: result === null || result === void 0 ? void 0 : result.data });
 });
 UserController.deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const userId = Number(id);
     const result = yield user_service_1.default.deleteUser({ id: userId });
-    (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
+    (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
 });
 UserController.updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const userId = Number(id);
     const result = yield user_service_1.default.updateUser(userId, req.body);
-    (0, response_middleware_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
+    (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
 });
 exports.default = UserController;

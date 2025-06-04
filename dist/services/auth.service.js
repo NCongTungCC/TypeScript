@@ -71,8 +71,6 @@ class AuthService {
             const accessToken = yield (0, generateToken_helper_1.generateToken)(user);
             res.cookie('jwt', accessToken, {
                 httpOnly: true,
-                secure: false,
-                sameSite: 'lax',
                 maxAge: 24 * 60 * 60 * 1000
             });
             return {
@@ -118,9 +116,12 @@ class AuthService {
             const hashedPassword = yield (0, password_helper_1.hashPassword)(newPassword);
             user.password = hashedPassword;
             yield user.save();
+            const newToken = yield (0, generateToken_helper_1.generateToken)(user);
             return {
                 code: 200,
                 message: 'Đổi mật khẩu thành công',
+                accessToken: newToken,
+                requireRelogin: true
             };
         });
     }

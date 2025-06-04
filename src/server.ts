@@ -3,8 +3,7 @@ import express from 'express';
 import router from './routes/index.router';
 import * as dotenv from 'dotenv';
 import { AppDataSource } from './configs/config';
-import { swaggerSpec } from './configs/swaggerconfig';
-import swaggerUi from 'swagger-ui-express';
+import useSwagger from './docs/swagger';
 import errorHandler from './middlewares/error.middleware';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -19,7 +18,7 @@ app.use(express.json());
 
 app.use(morgan('dev'));
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+useSwagger(app);
 
 app.use(cors());
 

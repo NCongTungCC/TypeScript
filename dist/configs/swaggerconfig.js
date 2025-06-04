@@ -31,6 +31,6 @@ const options = {
             },
         ],
     },
-    apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
+    apis: [],
 };
 exports.swaggerSpec = (0, swagger_jsdoc_1.default)(options);

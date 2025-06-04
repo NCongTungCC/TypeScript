@@ -60,8 +60,6 @@ class AuthService {
         const accessToken = await generateToken(user);
         res.cookie('jwt', accessToken, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'lax',
             maxAge: 24 * 60 * 60 * 1000
         });
        return {
@@ -103,9 +101,13 @@ class AuthService {
         const hashedPassword = await hashPassword(newPassword);
         user.password = hashedPassword as string;
         await user.save();
+        const newToken = await generateToken(user);
+    
         return {
             code : 200,
             message : 'Đổi mật khẩu thành công',
+            accessToken: newToken, 
+            requireRelogin: true
         }
     }
 }
