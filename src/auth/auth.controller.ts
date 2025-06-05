@@ -14,7 +14,9 @@ class AuthController {
     }
 
     static logout = async (req: Request, res: Response) => {
-        const result = await AuthService.logout(res);
+        const id = req.user?.id;
+        const userId = Number(id);
+        const result = await AuthService.logout(userId, res);
         sendResponse(res, {code: result?.code, message: result?.message});
     }
 
@@ -22,7 +24,7 @@ class AuthController {
         const id = req.user?.id;
         const { password, newPassword, confirmPassword } = req.body;
         const result = await AuthService.changePass({id, password, newPassword, confirmPassword});
-        sendResponse(res, {code: result?.code, message: result?.message, accessToken : result.accessToken });
+        sendResponse(res, {code: result?.code, message: result?.message});
     }
 }
 

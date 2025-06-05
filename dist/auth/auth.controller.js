@@ -27,7 +27,10 @@ AuthController.login = (req, res) => __awaiter(void 0, void 0, void 0, function*
     (0, response_helper_1.default)(res, { code: result.code, message: result.message, accessToken: result.accessToken });
 });
 AuthController.logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield auth_service_1.default.logout(res);
+    var _b;
+    const id = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
+    const userId = Number(id);
+    const result = yield auth_service_1.default.logout(userId, res);
     (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
 });
 AuthController.changePasswod = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -35,6 +38,6 @@ AuthController.changePasswod = (req, res) => __awaiter(void 0, void 0, void 0, f
     const id = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
     const { password, newPassword, confirmPassword } = req.body;
     const result = yield auth_service_1.default.changePass({ id, password, newPassword, confirmPassword });
-    (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message, accessToken: result.accessToken });
+    (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
 });
 exports.default = AuthController;

@@ -13,6 +13,7 @@ const user_entity_1 = require("../entities/user.entity");
 const password_helper_1 = require("../helpers/password.helper");
 const generateToken_helper_1 = require("../helpers/generateToken.helper");
 const validate_helper_1 = require("../helpers/validate.helper");
+const token_entity_1 = require("../entities/token.entity");
 class AuthService {
     static signup(payload) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -73,6 +74,11 @@ class AuthService {
                 httpOnly: true,
                 maxAge: 24 * 60 * 60 * 1000
             });
+            yield token_entity_1.Token.create({
+                userId: user.id,
+                token: accessToken,
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
+            }).save();
             return {
                 code: 200,
                 message: 'Đăng nhập thành công',
@@ -80,8 +86,10 @@ class AuthService {
             };
         });
     }
-    static logout(res) {
+    static logout(id, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_entity_1.User.findOne({ where: { id: id } });
+            yield token_entity_1.Token.delete({ userId: user === null || user === void 0 ? void 0 : user.id });
             res.clearCookie('jwt');
             return {
                 code: 200,
@@ -116,12 +124,10 @@ class AuthService {
             const hashedPassword = yield (0, password_helper_1.hashPassword)(newPassword);
             user.password = hashedPassword;
             yield user.save();
-            const newToken = yield (0, generateToken_helper_1.generateToken)(user);
+            yield token_entity_1.Token.delete({ userId: user.id });
             return {
                 code: 200,
                 message: 'Đổi mật khẩu thành công',
-                accessToken: newToken,
-                requireRelogin: true
             };
         });
     }

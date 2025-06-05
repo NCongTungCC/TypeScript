@@ -37,6 +37,7 @@ exports.AppDataSource = void 0;
 require("reflect-metadata");
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("../entities/user.entity");
+const token_entity_1 = require("../entities/token.entity");
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 exports.AppDataSource = new typeorm_1.DataSource({
@@ -48,7 +49,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     database: process.env.DB_NAME || 'your_db_name',
     synchronize: true,
     logging: false,
-    entities: [user_entity_1.User],
+    entities: [user_entity_1.User, token_entity_1.Token],
     migrations: [],
     subscribers: [],
 });

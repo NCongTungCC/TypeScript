@@ -4,6 +4,7 @@ import { hashPassword, comparePassword } from "../helpers/password.helper";
 import { generateToken } from "../helpers/generateToken.helper";
 import { Validate } from "../helpers/validate.helper";
 import { Response } from "express";
+import { Token } from "../entities/token.entity";
 
 class AuthService {
     static async signup(payload : Partial<UserInterface>) {
@@ -62,13 +63,20 @@ class AuthService {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000
         });
-       return {
+        await Token.create({
+            userId: user.id,
+            token: accessToken,
+            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
+        }).save();
+        return {
           code : 200,
           message : 'Đăng nhập thành công',
           accessToken : accessToken,
        }
     }
-    static async logout(res : Response) {
+    static async logout(id : number, res : Response) {
+        const user = await User.findOne({ where: { id : id } });
+        await Token.delete({ userId: user?.id });
         res.clearCookie('jwt');
         return {
             code: 200,
@@ -101,13 +109,11 @@ class AuthService {
         const hashedPassword = await hashPassword(newPassword);
         user.password = hashedPassword as string;
         await user.save();
-        const newToken = await generateToken(user);
+        await Token.delete({ userId: user.id });
     
         return {
             code : 200,
             message : 'Đổi mật khẩu thành công',
-            accessToken: newToken, 
-            requireRelogin: true
         }
     }
 }
