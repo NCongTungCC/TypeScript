@@ -63,6 +63,7 @@ class AuthService {
                     message: 'Incorrect password',
                 };
             }
+            yield token_entity_1.Token.delete({ userId: user.id });
             const accessToken = yield (0, generateToken_helper_1.generateToken)(user);
             res.cookie('jwt', accessToken, {
                 httpOnly: true,

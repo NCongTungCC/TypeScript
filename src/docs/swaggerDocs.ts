@@ -1,8 +1,8 @@
 export const paths = {
   '/signup': {
     post: {
-      tags: ['Authentication'],
-      summary: 'SignUp',
+      tags: ['Auth'],
+      summary: 'Signup',
       description: 'Register a new account',
       requestBody: {
         required: true,
@@ -56,36 +56,6 @@ export const paths = {
                   message: {
                     type: 'string',
                     example: 'Registration successful'
-                  },
-                  data: {
-                    type: 'object',
-                    properties: {
-                      username: {
-                        type: 'string',
-                        example: 'congtung'
-                      },
-                      email: {
-                        type: 'string',
-                        example: 'tung@gmail.com'
-                      },
-                      password: {
-                        type: 'string',
-                        example: '123456'
-                      },
-                      avatar: {
-                        type: 'string',
-                        example: 'tung.jpg'
-                      },
-                      gender: {
-                        type: 'string',
-                        example: 'male'
-                      },
-                      birthday: {
-                        type: 'string',
-                        format: 'date',
-                        example: '2002-02-01'
-                      }
-                    }
                   }
                 }
               }
@@ -137,8 +107,8 @@ export const paths = {
   },
   '/login': {
     post: {
-      tags: ['Authentication'],
-      summary: 'LogIn',
+      tags: ['Auth'],
+      summary: 'Login',
       description: 'User authentication',
       requestBody: {
         required: true,
@@ -250,8 +220,8 @@ export const paths = {
   },
   '/logout': {
     get: {
-      tags: ['Authentication'],
-      summary: 'LogOut',
+      tags: ['Auth'],
+      summary: 'Logout',
       description: 'End user session',
       security: [{ BearerAuth: [] }],
       responses: {
@@ -300,7 +270,7 @@ export const paths = {
   },
   '/changepass': {
     put: {
-      tags: ['Authentication'],
+      tags: ['Auth'],
       summary: 'Change Password',
       description: 'Change user account password',
       security: [{ BearerAuth: [] }],

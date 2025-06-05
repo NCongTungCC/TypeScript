@@ -31,7 +31,7 @@ const authentication = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         res.status(200).json({
             code: 404,
             status: "Error",
-            message: "Token not found or expired",
+            message: "Token not found",
         });
         return;
     }

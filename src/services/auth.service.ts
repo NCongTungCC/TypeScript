@@ -52,6 +52,7 @@ class AuthService {
                 message : 'Incorrect password',
             }
         }
+        await Token.delete({ userId: user.id });
         const accessToken = await generateToken(user);
         res.cookie('jwt', accessToken, {
             httpOnly: true,

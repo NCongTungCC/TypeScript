@@ -21,7 +21,7 @@ const authentication = async (req: Request, res: Response, next: NextFunction): 
             res.status(200).json({
               code: 404,
               status: "Error",
-              message: "Token not found or expired",
+              message: "Token not found",
             })
             return
         }

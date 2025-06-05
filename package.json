@@ -1,4 +1,14 @@
 {
+  "name": "nodejs-express-mysql-api",
+  "version": "1.0.0",
+  "description": "A Node.js API usin",
+  "main": "./dist/server.js",
+  "scripts": {
+    "start": "node ./dist/server.js",
+    "dev": "ts-node ./src/server.ts",
+    "build": "tsc",
+    "lint": "eslint . --ext .ts"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "class-transformer": "^0.5.1",
