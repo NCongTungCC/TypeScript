@@ -4,7 +4,7 @@ const errorHandler = (err, req, res, next) => {
     console.error('Lỗi', err.message);
     res.status(500).json({
         code: 500,
-        message: 'Đã xảy ra lỗi',
+        message: 'Internal Server Error',
         error: err.message,
     });
 };

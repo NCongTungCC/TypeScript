@@ -12,8 +12,8 @@ class AuthService {
         const user = await User.findOne({ where: { email: email } });
         if(user) {
             return {
-                code: 400,
-                message: "Email đã tồn tại.",
+                code: 409,
+                message: "Email is already in use",
             }
         }
         const count = await User.count();
@@ -28,17 +28,11 @@ class AuthService {
             birthday : new Date(birthday as Date),
         })
         await Validate(newUser);
-        if(!newUser) {
-            return {
-                code : 400,
-                message : 'Đăng ký thất bại',
-            }
-        }
         newUser.password = await hashPassword(password as string) as string;
         await newUser.save();
         return {
             code : 201,
-            message : 'Đăng ký thành công',
+            message : 'Signup successful',
             data : newUser,
         }
     }
@@ -48,14 +42,14 @@ class AuthService {
         if(!user) {
             return {
                 code : 404,
-                message : 'Không tìm thấy tài khoản',
+                message : 'Account not found',
             }
         }       
         const isMatch = await comparePassword(password as string, user.password);
         if(!isMatch) {
             return {
-                code : 400,
-                message : 'Mật khẩu không chính xác',
+                code : 401,
+                message : 'Incorrect password',
             }
         }
         const accessToken = await generateToken(user);
@@ -65,13 +59,13 @@ class AuthService {
         });
         await Token.create({
             userId: user.id,
-            token: accessToken,
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
+            token: accessToken.token,
+            expiresAt: new Date(Date.now() + Number(accessToken.expiresIn) * 1000)
         }).save();
         return {
           code : 200,
-          message : 'Đăng nhập thành công',
-          accessToken : accessToken,
+          message : 'Login successful',
+          accessToken : accessToken.token,
        }
     }
     static async logout(id : number, res : Response) {
@@ -80,7 +74,7 @@ class AuthService {
         res.clearCookie('jwt');
         return {
             code: 200,
-            message: 'Đăng xuất thành công',
+            message: 'Logout successful',
         }
     }
     static async changePass({id, password, newPassword, confirmPassword} : any) {
@@ -88,20 +82,20 @@ class AuthService {
         if(!user) {
             return {
                 code : 404,
-                message : 'Không tìm thấy người dùng',
+                message : 'User not found',
             }
         }
         const isMatch = await comparePassword(password, user.password);
         if(!isMatch) {
             return {
-                code : 400,
-                message : 'Sai mật khẩu cũ',
+                code : 401,
+                message : 'Incorrect old password',
             }
         }
         if(newPassword !== confirmPassword) {
             return {
-                code : 400,
-                message : 'Mật khẩu không trùng khớp',
+                code : 422,
+                message : 'Passwords do not match',
             }
         }
         user.password = newPassword;
@@ -113,7 +107,7 @@ class AuthService {
     
         return {
             code : 200,
-            message : 'Đổi mật khẩu thành công',
+            message : 'Password changed successfully',
         }
     }
 }

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_entity_1 = require("../entities/user.entity");
 const password_helper_1 = require("../helpers/password.helper");
 const validate_helper_1 = require("../helpers/validate.helper");
+const token_entity_1 = require("../entities/token.entity");
 class UserService {
     static getUser(_a) {
         return __awaiter(this, arguments, void 0, function* ({ id, role }) {
@@ -24,12 +25,12 @@ class UserService {
             if (!users) {
                 return {
                     code: 404,
-                    message: 'Không tìm thấy người dùng',
+                    message: 'Not found user',
                 };
             }
             return {
                 code: 200,
-                message: 'Lấy thành công',
+                message: 'Get user successfully',
                 data: users,
             };
         });
@@ -40,8 +41,8 @@ class UserService {
             const user = yield user_entity_1.User.findOne({ where: { email: email } });
             if (user) {
                 return {
-                    code: 400,
-                    message: 'Email đã tồn tại'
+                    code: 409,
+                    message: 'Email is already in use'
                 };
             }
             const newUser = yield user_entity_1.User.create({
@@ -54,17 +55,11 @@ class UserService {
                 birthday: new Date(birthday),
             });
             yield (0, validate_helper_1.Validate)(newUser);
-            if (!newUser) {
-                return {
-                    code: 400,
-                    message: 'Đăng ký thất bại',
-                };
-            }
             newUser.password = (yield (0, password_helper_1.hashPassword)(password));
             yield newUser.save();
             return {
                 code: 201,
-                message: 'Đăng ký thành công',
+                message: 'Create user successful',
                 data: newUser,
             };
         });
@@ -75,13 +70,14 @@ class UserService {
             if (!users) {
                 return {
                     code: 404,
-                    message: 'Không tìm thấy người dùng',
+                    message: 'Not found user',
                 };
             }
             yield user_entity_1.User.delete({ id: id });
+            yield token_entity_1.Token.delete({ userId: id });
             return {
                 code: 200,
-                message: 'Xóa thành công'
+                message: 'Delete user successfully'
             };
         });
     }
@@ -91,14 +87,14 @@ class UserService {
             if (!user) {
                 return {
                     code: 404,
-                    message: 'Không tìm thấy người dùng',
+                    message: 'Not found user',
                 };
             }
             const updateData = Object.assign(Object.assign({}, bodyData), { gender: bodyData.gender });
             yield user_entity_1.User.update({ id: id }, updateData);
             return {
                 code: 200,
-                message: 'Cập nhật thành công',
+                message: 'Update user successfully',
             };
         });
     }

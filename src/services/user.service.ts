@@ -2,6 +2,7 @@ import { UserInterface } from './../interfaces/user.interface';
 import { User } from "../entities/user.entity";
 import { hashPassword } from '../helpers/password.helper';
 import { Validate } from '../helpers/validate.helper';
+import { Token } from '../entities/token.entity';
 
 class UserService {
     static async getUser({id, role} : Partial<UserInterface>) {
@@ -14,12 +15,12 @@ class UserService {
         if(!users) {
             return {
                 code : 404,
-                message : 'Không tìm thấy người dùng',
+                message : 'Not found user',
             }
         }
         return {
             code: 200,
-            message: 'Lấy thành công',
+            message: 'Get user successfully',
             data : users,
         }
     }
@@ -28,8 +29,8 @@ class UserService {
         const user = await User.findOne({where : {email : email}});
         if(user) {
             return {
-                code : 400,
-                message : 'Email đã tồn tại'
+                code : 409,
+                message : 'Email is already in use'
             }
         }
         const newUser = await User.create({
@@ -42,17 +43,11 @@ class UserService {
                 birthday : new Date(birthday as Date),
         })
         await Validate(newUser);
-        if(!newUser) {
-            return {
-                code : 400,
-                message : 'Đăng ký thất bại',
-            }
-        }
         newUser.password = await hashPassword(password as string) as string;
         await newUser.save();
         return {
             code : 201,
-            message : 'Đăng ký thành công',
+            message : 'Create user successful',
             data : newUser,
         }
     }
@@ -62,13 +57,14 @@ class UserService {
         if(!users) { 
             return {
                 code : 404,
-                message : 'Không tìm thấy người dùng',
+                message : 'Not found user',
             }
         }
         await User.delete({id : id});
+        await Token.delete({userId : id});
         return {
             code : 200,
-            message : 'Xóa thành công'
+            message : 'Delete user successfully'
         }
     }
 
@@ -77,7 +73,7 @@ class UserService {
         if(!user) {
             return {
                 code : 404,
-                message : 'Không tìm thấy người dùng',
+                message : 'Not found user',
             }
         }
         const updateData = {
@@ -87,7 +83,7 @@ class UserService {
         await User.update({id : id}, updateData);
         return {
             code : 200,
-            message : 'Cập nhật thành công',
+            message : 'Update user successfully',
         }
     }
 }

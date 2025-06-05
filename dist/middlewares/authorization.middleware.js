@@ -6,7 +6,7 @@ const premission = (roles) => {
         var _a;
         const allowedRoles = Array.isArray(roles) ? roles : [roles];
         if (!req.user || !allowedRoles.includes((_a = req.user) === null || _a === void 0 ? void 0 : _a.role)) {
-            res.status(403).json({ message: 'Không có quyền truy cập' });
+            res.status(403).json({ message: 'Forbidden' });
             return;
         }
         next();

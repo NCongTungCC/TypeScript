@@ -21,8 +21,8 @@ class AuthService {
             const user = yield user_entity_1.User.findOne({ where: { email: email } });
             if (user) {
                 return {
-                    code: 400,
-                    message: "Email đã tồn tại.",
+                    code: 409,
+                    message: "Email is already in use",
                 };
             }
             const count = yield user_entity_1.User.count();
@@ -37,17 +37,11 @@ class AuthService {
                 birthday: new Date(birthday),
             });
             yield (0, validate_helper_1.Validate)(newUser);
-            if (!newUser) {
-                return {
-                    code: 400,
-                    message: 'Đăng ký thất bại',
-                };
-            }
             newUser.password = (yield (0, password_helper_1.hashPassword)(password));
             yield newUser.save();
             return {
                 code: 201,
-                message: 'Đăng ký thành công',
+                message: 'Signup successful',
                 data: newUser,
             };
         });
@@ -59,14 +53,14 @@ class AuthService {
             if (!user) {
                 return {
                     code: 404,
-                    message: 'Không tìm thấy tài khoản',
+                    message: 'Account not found',
                 };
             }
             const isMatch = yield (0, password_helper_1.comparePassword)(password, user.password);
             if (!isMatch) {
                 return {
-                    code: 400,
-                    message: 'Mật khẩu không chính xác',
+                    code: 401,
+                    message: 'Incorrect password',
                 };
             }
             const accessToken = yield (0, generateToken_helper_1.generateToken)(user);
@@ -76,13 +70,13 @@ class AuthService {
             });
             yield token_entity_1.Token.create({
                 userId: user.id,
-                token: accessToken,
-                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
+                token: accessToken.token,
+                expiresAt: new Date(Date.now() + Number(accessToken.expiresIn) * 1000)
             }).save();
             return {
                 code: 200,
-                message: 'Đăng nhập thành công',
-                accessToken: accessToken,
+                message: 'Login successful',
+                accessToken: accessToken.token,
             };
         });
     }
@@ -93,7 +87,7 @@ class AuthService {
             res.clearCookie('jwt');
             return {
                 code: 200,
-                message: 'Đăng xuất thành công',
+                message: 'Logout successful',
             };
         });
     }
@@ -103,20 +97,20 @@ class AuthService {
             if (!user) {
                 return {
                     code: 404,
-                    message: 'Không tìm thấy người dùng',
+                    message: 'User not found',
                 };
             }
             const isMatch = yield (0, password_helper_1.comparePassword)(password, user.password);
             if (!isMatch) {
                 return {
-                    code: 400,
-                    message: 'Sai mật khẩu cũ',
+                    code: 401,
+                    message: 'Incorrect old password',
                 };
             }
             if (newPassword !== confirmPassword) {
                 return {
-                    code: 400,
-                    message: 'Mật khẩu không trùng khớp',
+                    code: 422,
+                    message: 'Passwords do not match',
                 };
             }
             user.password = newPassword;
@@ -127,7 +121,7 @@ class AuthService {
             yield token_entity_1.Token.delete({ userId: user.id });
             return {
                 code: 200,
-                message: 'Đổi mật khẩu thành công',
+                message: 'Password changed successfully',
             };
         });
     }

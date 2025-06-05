@@ -5,8 +5,8 @@ exports.paths = {
     '/signup': {
         post: {
             tags: ['Authentication'],
-            summary: 'Đăng ký',
-            description: 'Đăng ký tài khoản',
+            summary: 'SignUp',
+            description: 'Register a new account',
             requestBody: {
                 required: true,
                 content: {
@@ -46,7 +46,7 @@ exports.paths = {
             },
             responses: {
                 201: {
-                    description: 'Đăng ký thành công',
+                    description: 'Registration successful',
                     content: {
                         'application/json': {
                             schema: {
@@ -58,7 +58,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Đăng ký thành công'
+                                        example: 'Registration successful'
                                     },
                                     data: {
                                         type: 'object',
@@ -95,8 +95,8 @@ exports.paths = {
                         }
                     }
                 },
-                400: {
-                    description: 'Email đã tồn tại',
+                409: {
+                    description: 'Email already exists',
                     content: {
                         'application/json': {
                             schema: {
@@ -104,11 +104,11 @@ exports.paths = {
                                 properties: {
                                     code: {
                                         type: 'number',
-                                        example: 400
+                                        example: 409
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Email đã được sử dụng'
+                                        example: 'Email is already in use'
                                     }
                                 }
                             }
@@ -116,7 +116,7 @@ exports.paths = {
                     }
                 },
                 500: {
-                    description: 'Lỗi máy chủ',
+                    description: 'Server error',
                     content: {
                         'application/json': {
                             schema: {
@@ -128,7 +128,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Đã xảy ra lỗi phía máy chủ'
+                                        example: 'An error occurred on the server'
                                     }
                                 }
                             }
@@ -141,8 +141,8 @@ exports.paths = {
     '/login': {
         post: {
             tags: ['Authentication'],
-            summary: 'Đăng nhập',
-            description: 'Đăng nhập tài khoản',
+            summary: 'LogIn',
+            description: 'User authentication',
             requestBody: {
                 required: true,
                 content: {
@@ -165,7 +165,7 @@ exports.paths = {
             },
             responses: {
                 200: {
-                    description: 'Đăng nhập thành công',
+                    description: 'Login successful',
                     content: {
                         'application/json': {
                             schema: {
@@ -177,7 +177,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Đăng nhập thành công'
+                                        example: 'Login successful'
                                     },
                                     accessToken: {
                                         type: 'string',
@@ -188,8 +188,8 @@ exports.paths = {
                         }
                     }
                 },
-                400: {
-                    description: 'Sai tài khoản mật khẩu',
+                401: {
+                    description: 'Incorrect password',
                     content: {
                         'application/json': {
                             schema: {
@@ -197,11 +197,11 @@ exports.paths = {
                                 properties: {
                                     code: {
                                         type: 'number',
-                                        example: 400
+                                        example: 401
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Sai tài khoản mật khẩu'
+                                        example: 'Incorrect password'
                                     }
                                 }
                             }
@@ -209,7 +209,7 @@ exports.paths = {
                     }
                 },
                 404: {
-                    description: 'Không tìm thấy tài khoản',
+                    description: 'Account not found',
                     content: {
                         'application/json': {
                             schema: {
@@ -221,7 +221,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Không tìm thấy email'
+                                        example: 'Email not found'
                                     }
                                 }
                             }
@@ -229,7 +229,7 @@ exports.paths = {
                     }
                 },
                 500: {
-                    description: 'Lỗi máy chủ',
+                    description: 'Server error',
                     content: {
                         'application/json': {
                             schema: {
@@ -241,7 +241,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Đã xảy ra lỗi phía máy chủ'
+                                        example: 'Server error occurred'
                                     }
                                 }
                             }
@@ -254,12 +254,12 @@ exports.paths = {
     '/logout': {
         get: {
             tags: ['Authentication'],
-            summary: 'Đăng xuất',
-            description: 'Đăng xuất tài khoản',
+            summary: 'LogOut',
+            description: 'End user session',
             security: [{ BearerAuth: [] }],
             responses: {
                 200: {
-                    description: 'Đăng xuất thành công',
+                    description: 'Logout successful',
                     content: {
                         'application/json': {
                             schema: {
@@ -271,7 +271,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Đăng xuất thành công'
+                                        example: 'Logout successful'
                                     }
                                 }
                             }
@@ -279,7 +279,7 @@ exports.paths = {
                     }
                 },
                 401: {
-                    description: 'Không có quyền truy cập',
+                    description: 'Unauthorized',
                     content: {
                         'application/json': {
                             schema: {
@@ -291,7 +291,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Không có quyền truy cập'
+                                        example: 'Unauthorized access'
                                     }
                                 }
                             }
@@ -304,8 +304,8 @@ exports.paths = {
     '/changepass': {
         put: {
             tags: ['Authentication'],
-            summary: 'Đổi mật khẩu',
-            description: 'Thay đổi mật khẩu tài khoản',
+            summary: 'Change Password',
+            description: 'Change user account password',
             security: [{ BearerAuth: [] }],
             requestBody: {
                 required: true,
@@ -317,17 +317,17 @@ exports.paths = {
                                 password: {
                                     type: 'string',
                                     example: '123456',
-                                    description: 'Mật khẩu cũ'
+                                    description: 'Current password'
                                 },
                                 newPassword: {
                                     type: 'string',
                                     example: '654321',
-                                    description: 'Mật khẩu mới'
+                                    description: 'New password'
                                 },
                                 confirmPassword: {
                                     type: 'string',
                                     example: '654321',
-                                    description: 'Xác nhận mật khẩu mới'
+                                    description: 'Confirm new password'
                                 }
                             }
                         }
@@ -336,7 +336,7 @@ exports.paths = {
             },
             responses: {
                 200: {
-                    description: 'Đổi mật khẩu thành công',
+                    description: 'Password changed successfully',
                     content: {
                         'application/json': {
                             schema: {
@@ -348,7 +348,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Đổi mật khẩu thành công'
+                                        example: 'Password changed successfully'
                                     },
                                     accessToken: {
                                         type: 'string',
@@ -363,28 +363,8 @@ exports.paths = {
                         }
                     }
                 },
-                400: {
-                    description: 'Thông tin không hợp lệ',
-                    content: {
-                        'application/json': {
-                            schema: {
-                                type: 'object',
-                                properties: {
-                                    code: {
-                                        type: 'number',
-                                        example: 400
-                                    },
-                                    message: {
-                                        type: 'string',
-                                        example: 'Mật khẩu không trùng khớp'
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
                 401: {
-                    description: 'Không có quyền truy cập',
+                    description: 'Incorrect old password',
                     content: {
                         'application/json': {
                             schema: {
@@ -396,7 +376,27 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Không có quyền truy cập'
+                                        example: 'Incorrect old password'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                422: {
+                    description: 'Validation error',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: {
+                                        type: 'number',
+                                        example: 422
+                                    },
+                                    message: {
+                                        type: 'string',
+                                        example: 'Passwords do not match'
                                     }
                                 }
                             }
@@ -404,7 +404,7 @@ exports.paths = {
                     }
                 },
                 404: {
-                    description: 'Không tìm thấy người dùng',
+                    description: 'User not found',
                     content: {
                         'application/json': {
                             schema: {
@@ -416,7 +416,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Không tìm thấy người dùng'
+                                        example: 'User not found'
                                     }
                                 }
                             }
@@ -429,12 +429,12 @@ exports.paths = {
     '/users': {
         get: {
             tags: ['Users'],
-            summary: 'Lấy danh sách người dùng',
-            description: 'Lấy danh sách tất cả người dùng',
+            summary: 'Get All Users',
+            description: 'Retrieve list of all users',
             security: [{ BearerAuth: [] }],
             responses: {
                 200: {
-                    description: 'Lấy danh sách thành công',
+                    description: 'Users retrieved successfully',
                     content: {
                         'application/json': {
                             schema: {
@@ -446,7 +446,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Lấy thành công'
+                                        example: 'Get user successfully'
                                     },
                                     data: {
                                         type: 'array',
@@ -491,7 +491,7 @@ exports.paths = {
                     }
                 },
                 401: {
-                    description: 'Không có quyền truy cập',
+                    description: 'Unauthorized',
                     content: {
                         'application/json': {
                             schema: {
@@ -503,7 +503,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Không có quyền truy cập'
+                                        example: 'Unauthorized access'
                                     }
                                 }
                             }
@@ -511,7 +511,7 @@ exports.paths = {
                     }
                 },
                 403: {
-                    description: 'Không đủ quyền',
+                    description: 'Forbidden',
                     content: {
                         'application/json': {
                             schema: {
@@ -523,7 +523,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Không đủ quyền truy cập'
+                                        example: 'Insufficient permissions'
                                     }
                                 }
                             }
@@ -534,8 +534,8 @@ exports.paths = {
         },
         post: {
             tags: ['Users'],
-            summary: 'Thêm người dùng mới',
-            description: 'Thêm người dùng mới (chỉ admin)',
+            summary: 'Create New User',
+            description: 'Create a new user (admin only)',
             security: [{ BearerAuth: [] }],
             requestBody: {
                 required: true,
@@ -580,7 +580,7 @@ exports.paths = {
             },
             responses: {
                 201: {
-                    description: 'Tạo người dùng thành công',
+                    description: 'User created successfully',
                     content: {
                         'application/json': {
                             schema: {
@@ -592,7 +592,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Đăng ký thành công'
+                                        example: 'User created successfully'
                                     },
                                     data: {
                                         type: 'object',
@@ -616,8 +616,8 @@ exports.paths = {
                         }
                     }
                 },
-                400: {
-                    description: 'Lỗi dữ liệu',
+                409: {
+                    description: 'Email already exists',
                     content: {
                         'application/json': {
                             schema: {
@@ -625,11 +625,11 @@ exports.paths = {
                                 properties: {
                                     code: {
                                         type: 'number',
-                                        example: 400
+                                        example: 409
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Email đã tồn tại'
+                                        example: 'Email is already in use'
                                     }
                                 }
                             }
@@ -637,7 +637,7 @@ exports.paths = {
                     }
                 },
                 403: {
-                    description: 'Không đủ quyền',
+                    description: 'Forbidden',
                     content: {
                         'application/json': {
                             schema: {
@@ -649,7 +649,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Không đủ quyền thực hiện thao tác này'
+                                        example: 'Insufficient permissions to perform this action'
                                     }
                                 }
                             }
@@ -662,15 +662,15 @@ exports.paths = {
     '/users/{id}': {
         put: {
             tags: ['Users'],
-            summary: 'Cập nhật thông tin người dùng',
-            description: 'Cập nhật thông tin của một người dùng theo ID',
+            summary: 'Update User',
+            description: 'Update user information by ID',
             security: [{ BearerAuth: [] }],
             parameters: [
                 {
                     name: 'id',
                     in: 'path',
                     required: true,
-                    description: 'ID của người dùng',
+                    description: 'User ID',
                     schema: {
                         type: 'integer'
                     }
@@ -707,7 +707,7 @@ exports.paths = {
             },
             responses: {
                 200: {
-                    description: 'Cập nhật thành công',
+                    description: 'User updated successfully',
                     content: {
                         'application/json': {
                             schema: {
@@ -719,7 +719,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Cập nhật thành công'
+                                        example: 'User updated successfully'
                                     }
                                 }
                             }
@@ -727,7 +727,7 @@ exports.paths = {
                     }
                 },
                 404: {
-                    description: 'Không tìm thấy người dùng',
+                    description: 'User not found',
                     content: {
                         'application/json': {
                             schema: {
@@ -739,7 +739,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Không tìm thấy người dùng'
+                                        example: 'User not found'
                                     }
                                 }
                             }
@@ -747,7 +747,7 @@ exports.paths = {
                     }
                 },
                 403: {
-                    description: 'Không đủ quyền',
+                    description: 'Forbidden',
                     content: {
                         'application/json': {
                             schema: {
@@ -759,7 +759,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Không đủ quyền thực hiện thao tác này'
+                                        example: 'Insufficient permissions to perform this action'
                                     }
                                 }
                             }
@@ -770,15 +770,15 @@ exports.paths = {
         },
         delete: {
             tags: ['Users'],
-            summary: 'Xóa người dùng',
-            description: 'Xóa một người dùng theo ID (chỉ admin)',
+            summary: 'Delete User',
+            description: 'Remove a user by ID (admin only)',
             security: [{ BearerAuth: [] }],
             parameters: [
                 {
                     name: 'id',
                     in: 'path',
                     required: true,
-                    description: 'ID của người dùng',
+                    description: 'User ID',
                     schema: {
                         type: 'integer'
                     }
@@ -786,7 +786,7 @@ exports.paths = {
             ],
             responses: {
                 200: {
-                    description: 'Xóa thành công',
+                    description: 'User deleted successfully',
                     content: {
                         'application/json': {
                             schema: {
@@ -798,7 +798,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Xóa thành công'
+                                        example: 'User deleted successfully'
                                     }
                                 }
                             }
@@ -806,7 +806,7 @@ exports.paths = {
                     }
                 },
                 404: {
-                    description: 'Không tìm thấy người dùng',
+                    description: 'User not found',
                     content: {
                         'application/json': {
                             schema: {
@@ -818,7 +818,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Không tìm thấy người dùng'
+                                        example: 'User not found'
                                     }
                                 }
                             }
@@ -826,7 +826,7 @@ exports.paths = {
                     }
                 },
                 403: {
-                    description: 'Không đủ quyền',
+                    description: 'Forbidden',
                     content: {
                         'application/json': {
                             schema: {
@@ -838,7 +838,7 @@ exports.paths = {
                                     },
                                     message: {
                                         type: 'string',
-                                        example: 'Không đủ quyền thực hiện thao tác này'
+                                        example: 'Insufficient permissions to perform this action'
                                     }
                                 }
                             }

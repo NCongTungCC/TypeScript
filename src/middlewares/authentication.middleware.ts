@@ -12,7 +12,7 @@ const authentication = async (req: Request, res: Response, next: NextFunction): 
             res.status(200).json({
               code: 404,
               status: "Error",
-              message: "Không tìm thấy token",
+              message: "No access token provided",
             })
             return
         }
@@ -21,7 +21,7 @@ const authentication = async (req: Request, res: Response, next: NextFunction): 
             res.status(200).json({
               code: 404,
               status: "Error",
-              message: "Token không tồn tại hoặc hết hạn",
+              message: "Token not found or expired",
             })
             return
         }
@@ -29,7 +29,7 @@ const authentication = async (req: Request, res: Response, next: NextFunction): 
             res.status(200).json({
               code: 403,
               status: "Error",
-              message: "Token đã hết hạn",
+              message: "Token expired",
             });
             return
         }
@@ -38,7 +38,7 @@ const authentication = async (req: Request, res: Response, next: NextFunction): 
             res.status(200).json({
               code: 403,
               status: "Error",
-              message: "Token không hợp lệ",
+              message: "Invalid token",
             });
             return
           }

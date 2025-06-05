@@ -42,8 +42,9 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const secret = process.env.JWT_SECRET_KEY || 'key';
 const generateToken = (user) => {
-    return jsonwebtoken_1.default.sign({ id: user.id, role: user.role }, secret, {
-        expiresIn: '30m',
+    const token = jsonwebtoken_1.default.sign({ id: user.id, role: user.role }, secret, {
+        expiresIn: 30 * 60,
     });
+    return { token, expiresIn: 30 * 60 };
 };
 exports.generateToken = generateToken;
