@@ -40,4 +40,19 @@ AuthController.changePasswod = (req, res) => __awaiter(void 0, void 0, void 0, f
     const result = yield auth_service_1.default.changePass({ id, password, newPassword, confirmPassword });
     (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
 });
+AuthController.forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    const result = yield auth_service_1.default.forgotPassword({ email });
+    (0, response_helper_1.default)(res, { code: result.code, message: result.message });
+});
+AuthController.verifyOTP = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, otp } = req.body;
+    const result = yield auth_service_1.default.verifyOTP(email, otp);
+    (0, response_helper_1.default)(res, { code: result.code, message: result.message });
+});
+AuthController.resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, newPassword } = req.body;
+    const result = yield auth_service_1.default.resetPassword(email, newPassword);
+    (0, response_helper_1.default)(res, { code: result.code, message: result.message });
+});
 exports.default = AuthController;

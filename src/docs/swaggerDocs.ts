@@ -316,14 +316,6 @@ export const paths = {
                   message: {
                     type: 'string',
                     example: 'Password changed successfully'
-                  },
-                  accessToken: {
-                    type: 'string',
-                    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sZSI6InVzZXIiLCJpYXQiOjE3NDg4MzAxODIsImV4cCI6MTc0ODgzMTk4Mn0.CCq45tW-6ND-c1Fafejj9C87q_wOBxCCZjr7EY0W_wo'
-                  },
-                  requireRelogin: {
-                    type: 'boolean',
-                    example: true
                   }
                 }
               }
@@ -393,6 +385,258 @@ export const paths = {
       }
     }
   },
+'/forgotpassword': {
+  post: {
+    tags: ['Auth'],
+    summary: 'Forgot Password',
+    description: 'Send OTP code to email for password reset',
+    requestBody: {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              email: {
+                type: 'string',
+                example: 'tung@gmail.com',
+                description: 'User email address'
+              }
+            },
+            required: ['email']
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        description: 'OTP sent successfully',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: {
+                  type: 'number',
+                  example: 200
+                },
+                message: {
+                  type: 'string',
+                  example: 'OTP sent to email'
+                }
+              }
+            }
+          }
+        }
+      },
+      404: {
+        description: 'Email not found',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: {
+                  type: 'number',
+                  example: 404
+                },
+                message: {
+                  type: 'string',
+                  example: 'Not found email'
+                }
+              }
+            }
+          }
+        }
+      },
+      500: {
+        description: 'Server error',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: {
+                  type: 'number',
+                  example: 500
+                },
+                message: {
+                  type: 'string',
+                  example: 'Failed to send OTP'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+},
+'/verifyotp': {
+  post: {
+    tags: ['Auth'],
+    summary: 'Verify OTP',
+    description: 'Verify OTP code sent to email',
+    requestBody: {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              email: {
+                type: 'string',
+                example: 'tung@gmail.com',
+                description: 'User email address'
+              },
+              otp: {
+                type: 'string',
+                example: '123456',
+                description: 'OTP received in email'
+              }
+            },
+            required: ['email', 'otp']
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        description: 'OTP verified successfully',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: {
+                  type: 'number',
+                  example: 200
+                },
+                message: {
+                  type: 'string',
+                  example: 'OTP verified successfully'
+                }
+              }
+            }
+          }
+        }
+      },
+      401: {
+        description: 'Invalid OTP',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: {
+                  type: 'number',
+                  example: 401
+                },
+                message: {
+                  type: 'string',
+                  example: 'Invalid or expired OTP'
+                }
+              }
+            }
+          }
+        }
+      },
+      404: {
+        description: 'User not found',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: {
+                  type: 'number',
+                  example: 404
+                },
+                message: {
+                  type: 'string',
+                  example: 'User not found'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+},
+
+'/resetpassword': {
+  post: {
+    tags: ['Auth'],
+    summary: 'Reset Password',
+    description: 'Reset password after OTP verification',
+    requestBody: {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              email: {
+                type: 'string',
+                example: 'tung@gmail.com',
+                description: 'User email address'
+              },
+              newPassword: {
+                type: 'string',
+                example: '654321',
+                description: 'New password'
+              }
+            },
+            required: ['email', 'newPassword']
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        description: 'Password reset successfully',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: {
+                  type: 'number',
+                  example: 200
+                },
+                message: {
+                  type: 'string',
+                  example: 'Password reset successfully'
+                }
+              }
+            }
+          }
+        }
+      },
+      404: {
+        description: 'User not found',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: {
+                  type: 'number',
+                  example: 404
+                },
+                message: {
+                  type: 'string',
+                  example: 'User not found'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+},
   '/users': {
     get: {
       tags: ['Users'],

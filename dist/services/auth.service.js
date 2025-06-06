@@ -8,12 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_entity_1 = require("../entities/user.entity");
 const password_helper_1 = require("../helpers/password.helper");
 const generateToken_helper_1 = require("../helpers/generateToken.helper");
 const validate_helper_1 = require("../helpers/validate.helper");
 const token_entity_1 = require("../entities/token.entity");
+const crypto_1 = __importDefault(require("crypto"));
+const sendEmail_helper_1 = require("../helpers/sendEmail.helper");
 class AuthService {
     static signup(payload) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -92,7 +98,7 @@ class AuthService {
             };
         });
     }
-    static changePass(_a) {
+    static changePass(_b) {
         return __awaiter(this, arguments, void 0, function* ({ id, password, newPassword, confirmPassword }) {
             const user = yield user_entity_1.User.findOne({ where: { id: id } });
             if (!user) {
@@ -126,5 +132,66 @@ class AuthService {
             };
         });
     }
+    static forgotPassword(_b) {
+        return __awaiter(this, arguments, void 0, function* ({ email }) {
+            const user = yield user_entity_1.User.findOne({ where: { email: email } });
+            if (!user) {
+                return {
+                    code: 404,
+                    message: 'Not found email',
+                };
+            }
+            const otp = crypto_1.default.randomInt(100000, 999999).toString();
+            const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+            yield token_entity_1.Token.create({
+                userId: user.id,
+                token: otp,
+                expiresAt: expiresAt
+            }).save();
+            yield (0, sendEmail_helper_1.sendOTPEmail)(email, otp);
+            return {
+                code: 200,
+                message: 'OTP sent to email',
+            };
+        });
+    }
+    static verifyOTP(email, otp) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_entity_1.User.findOne({ where: { email: email } });
+            if (!user) {
+                return {
+                    code: 404,
+                    message: 'User not found',
+                };
+            }
+            const token = yield token_entity_1.Token.findOne({ where: { userId: user.id, token: otp } });
+            if (!token || !token.expiresAt || token.expiresAt < new Date()) {
+                return {
+                    code: 401,
+                    message: 'Invalid or expired OTP',
+                };
+            }
+            yield token_entity_1.Token.delete({ userId: user.id, token: otp });
+            return {
+                code: 200,
+                message: 'OTP verified successfully',
+            };
+        });
+    }
 }
+_a = AuthService;
+AuthService.resetPassword = (email, newPassword) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_entity_1.User.findOne({ where: { email: email } });
+    if (!user) {
+        return {
+            code: 404,
+            message: 'User not found',
+        };
+    }
+    user.password = (yield (0, password_helper_1.hashPassword)(newPassword));
+    return {
+        code: 200,
+        message: 'Password reset successfully',
+    };
+});
 exports.default = AuthService;

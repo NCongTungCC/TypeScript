@@ -26,6 +26,24 @@ class AuthController {
         const result = await AuthService.changePass({id, password, newPassword, confirmPassword});
         sendResponse(res, {code: result?.code, message: result?.message});
     }
+
+    static forgotPassword = async (req: Request, res: Response) => {
+        const { email } = req.body;
+        const result = await AuthService.forgotPassword({email});
+        sendResponse(res, { code: result.code, message: result.message });
+    }
+
+    static verifyOTP = async (req: Request, res: Response) => {   
+        const { email, otp } = req.body;
+        const result = await AuthService.verifyOTP(email, otp);
+        sendResponse(res, { code: result.code, message: result.message });
+    }
+
+    static resetPassword = async (req: Request, res: Response) => {
+        const { email, newPassword } = req.body;
+        const result = await AuthService.resetPassword(email, newPassword);
+        sendResponse(res, { code: result.code, message: result.message });
+    }
 }
 
 export default AuthController;

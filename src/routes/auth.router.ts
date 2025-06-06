@@ -12,5 +12,10 @@ router.get('/logout', authentication, catchAsync(AuthController.logout));
 
 router.put('/changepass', authentication, catchAsync(AuthController.changePasswod));
 
+router.post('/forgotpassword', catchAsync(AuthController.forgotPassword));
+
+router.post('/verifyotp', catchAsync(AuthController.verifyOTP));
+
+router.post('/resetpassword', catchAsync(AuthController.resetPassword));
 
 export default router;

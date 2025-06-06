@@ -5,6 +5,8 @@ import { generateToken } from "../helpers/generateToken.helper";
 import { Validate } from "../helpers/validate.helper";
 import { Response } from "express";
 import { Token } from "../entities/token.entity";
+import crypto from "crypto";
+import { sendOTPEmail } from "../helpers/sendEmail.helper";
 
 class AuthService {
     static async signup(payload : Partial<UserInterface>) {
@@ -111,6 +113,65 @@ class AuthService {
             message : 'Password changed successfully',
         }
     }
+    static async forgotPassword({email} : Partial<UserInterface>) {
+        const user = await User.findOne({where : {email : email}});
+        if(!user) {
+            return {
+                code : 404,
+                message : 'Not found email',
+            }
+        }
+        const otp = crypto.randomInt(100000, 999999).toString();
+        const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+        await Token.create({
+            userId: user.id,
+            token: otp,
+            expiresAt: expiresAt
+        }).save();
+        await sendOTPEmail(email as string, otp);
+        return {
+            code : 200,
+            message : 'OTP sent to email',
+        }
+    }
+
+    static async verifyOTP(email: string, otp: string) {
+        const user = await User.findOne({ where: { email: email } });
+        if (!user) {
+            return {
+                code: 404,
+                message: 'User not found',
+            }
+        }
+        const token = await Token.findOne({ where: { userId: user.id, token: otp } });
+        if (!token || !token.expiresAt || token.expiresAt < new Date()) {
+            return {
+                code: 401,
+                message: 'Invalid or expired OTP',
+            }
+        }
+        await Token.delete({ userId: user.id, token: otp });
+        return {
+            code: 200,
+            message: 'OTP verified successfully',
+        }
+    }
+
+    static resetPassword = async (email : string, newPassword: string) => {
+        const user = await User.findOne({ where: { email: email } });
+        if (!user) {
+            return {
+                code: 404,
+                message: 'User not found',
+            }
+        }
+        user.password = await hashPassword(newPassword) as string;
+        return {
+            code: 200,
+            message: 'Password reset successfully',
+        }
+    }
+
 }
 
 export default AuthService
