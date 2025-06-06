@@ -1,32 +1,28 @@
 import UserService from "../services/user.service";
 import { Response, Request } from "express";
-import sendResponse from "../helpers/response.helper";
+import BaseController from "./base.controller";
 
-class UserController {
-    static getUser = async (req: Request, res: Response) => {
-        const role = req.user?.role;
-        const id = req.user?.id;
-        const result = await UserService.getUser({ role, id });
-        sendResponse(res, { code: result?.code, message: result?.message, data: result?.data });
+class UserController extends BaseController {
+    constructor() {
+        super('UserController');
     }
-
+    static getUser = async (req: Request, res: Response) => {
+        const controller = new UserController();
+        await controller.handleRequest(res, req, (req) => UserService.getUser({ id: req.user?.id, role: req.user?.role }));
+    }
     static createUser = async (req : Request, res :Response) => {
-        const result = await UserService.createUser(req.body);
-        sendResponse(res, { code: result?.code, message: result?.message, data: result?.data });
+        const controller = new UserController();
+        await controller.handleRequest(res, req, (req) => UserService.createUser(req.body));
     }
 
     static deleteUser = async (req : Request, res : Response) => {
-        const {id} = req.params;
-        const userId = Number(id);
-        const result = await UserService.deleteUser({id : userId});
-        sendResponse(res, { code: result?.code, message: result?.message});
+        const controller = new UserController();
+        await controller.handleRequest(res, req, (req) => UserService.deleteUser({ id: Number(req.params.id) }));
     }
 
     static updateUser = async (req : Request, res : Response) => {
-        const {id} = req.params;
-        const userId = Number(id)
-        const result = await UserService.updateUser(userId, req.body);
-        sendResponse(res, { code: result?.code, message: result?.message});
+        const controller = new UserController();
+        await controller.handleRequest(res, req, (req) => UserService.updateUser(Number(req.params.id), req.body));
     }
 }
 

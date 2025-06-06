@@ -1,48 +1,49 @@
 import {Response, Request} from 'express';
-import sendResponse from '../helpers/response.helper';
 import AuthService from '../services/auth.service';
+import BaseController from '../controllers/base.controller';
 
-class AuthController {
+class AuthController extends BaseController {
+    constructor() {
+        super('AuthController');
+    }
     static signup = async (req : Request, res : Response) => {
-        const result = await AuthService.signup(req.body);
-        sendResponse(res, {code : result.code, message : result.message, data : result.data});
+        const controller = new AuthController();
+        await controller.handleRequest(res, req, (req) => AuthService.signup(req.body));
     }
 
     static login = async (req : Request, res : Response) => {
-        const result = await AuthService.login(res, req.body);
-        sendResponse(res, {code : result.code, message : result.message, accessToken : result.accessToken});
+        const controller = new AuthController();
+        await controller.handleRequest(res, req, (req) => AuthService.login(res, req.body));
     }
 
     static logout = async (req: Request, res: Response) => {
-        const id = req.user?.id;
-        const userId = Number(id);
-        const result = await AuthService.logout(userId, res);
-        sendResponse(res, {code: result?.code, message: result?.message});
+        const controller = new AuthController();
+        const userId = Number(req.user?.id);
+        await controller.handleRequest(res, req, (req) => AuthService.logout(userId, res));
     }
 
     static changePasswod = async (req : Request, res : Response) => {
-        const id = req.user?.id;
+        const controller = new AuthController();
         const { password, newPassword, confirmPassword } = req.body;
-        const result = await AuthService.changePass({id, password, newPassword, confirmPassword});
-        sendResponse(res, {code: result?.code, message: result?.message});
+        await controller.handleRequest(res, req, (req) => AuthService.changePass({id: req.user?.id, password, newPassword, confirmPassword}));
     }
 
     static forgotPassword = async (req: Request, res: Response) => {
+        const controller = new AuthController();
         const { email } = req.body;
-        const result = await AuthService.forgotPassword({email});
-        sendResponse(res, { code: result.code, message: result.message });
+        await controller.handleRequest(res, req, (req) => AuthService.forgotPassword({ email }));
     }
 
-    static verifyOTP = async (req: Request, res: Response) => {   
+    static verifyOTP = async (req: Request, res: Response) => {
+        const controller = new AuthController();
         const { email, otp } = req.body;
-        const result = await AuthService.verifyOTP(email, otp);
-        sendResponse(res, { code: result.code, message: result.message });
+        await controller.handleRequest(res, req, (req) => AuthService.verifyOTP(email, otp));
     }
 
     static resetPassword = async (req: Request, res: Response) => {
         const { email, newPassword } = req.body;
-        const result = await AuthService.resetPassword(email, newPassword);
-        sendResponse(res, { code: result.code, message: result.message });
+        const controller = new AuthController();
+        await controller.handleRequest(res, req, (req) => AuthService.resetPassword(email, newPassword));
     }
 }
 

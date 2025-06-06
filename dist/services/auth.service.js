@@ -48,7 +48,6 @@ class AuthService {
             return {
                 code: 201,
                 message: 'Signup successful',
-                data: newUser,
             };
         });
     }

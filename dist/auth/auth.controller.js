@@ -13,46 +13,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-const response_helper_1 = __importDefault(require("../helpers/response.helper"));
 const auth_service_1 = __importDefault(require("../services/auth.service"));
-class AuthController {
+const base_controller_1 = __importDefault(require("../controllers/base.controller"));
+class AuthController extends base_controller_1.default {
+    constructor() {
+        super('AuthController');
+    }
 }
 _a = AuthController;
 AuthController.signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield auth_service_1.default.signup(req.body);
-    (0, response_helper_1.default)(res, { code: result.code, message: result.message, data: result.data });
+    const controller = new _a();
+    yield controller.handleRequest(res, req, (req) => auth_service_1.default.signup(req.body));
 });
 AuthController.login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield auth_service_1.default.login(res, req.body);
-    (0, response_helper_1.default)(res, { code: result.code, message: result.message, accessToken: result.accessToken });
+    const controller = new _a();
+    yield controller.handleRequest(res, req, (req) => auth_service_1.default.login(res, req.body));
 });
 AuthController.logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
-    const id = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
-    const userId = Number(id);
-    const result = yield auth_service_1.default.logout(userId, res);
-    (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
+    const controller = new _a();
+    const userId = Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.id);
+    yield controller.handleRequest(res, req, (req) => auth_service_1.default.logout(userId, res));
 });
 AuthController.changePasswod = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
-    const id = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
+    const controller = new _a();
     const { password, newPassword, confirmPassword } = req.body;
-    const result = yield auth_service_1.default.changePass({ id, password, newPassword, confirmPassword });
-    (0, response_helper_1.default)(res, { code: result === null || result === void 0 ? void 0 : result.code, message: result === null || result === void 0 ? void 0 : result.message });
+    yield controller.handleRequest(res, req, (req) => { var _b; return auth_service_1.default.changePass({ id: (_b = req.user) === null || _b === void 0 ? void 0 : _b.id, password, newPassword, confirmPassword }); });
 });
 AuthController.forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const controller = new _a();
     const { email } = req.body;
-    const result = yield auth_service_1.default.forgotPassword({ email });
-    (0, response_helper_1.default)(res, { code: result.code, message: result.message });
+    yield controller.handleRequest(res, req, (req) => auth_service_1.default.forgotPassword({ email }));
 });
 AuthController.verifyOTP = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const controller = new _a();
     const { email, otp } = req.body;
-    const result = yield auth_service_1.default.verifyOTP(email, otp);
-    (0, response_helper_1.default)(res, { code: result.code, message: result.message });
+    yield controller.handleRequest(res, req, (req) => auth_service_1.default.verifyOTP(email, otp));
 });
 AuthController.resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, newPassword } = req.body;
-    const result = yield auth_service_1.default.resetPassword(email, newPassword);
-    (0, response_helper_1.default)(res, { code: result.code, message: result.message });
+    const controller = new _a();
+    yield controller.handleRequest(res, req, (req) => auth_service_1.default.resetPassword(email, newPassword));
 });
 exports.default = AuthController;

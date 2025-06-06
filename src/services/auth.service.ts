@@ -35,7 +35,6 @@ class AuthService {
         return {
             code : 201,
             message : 'Signup successful',
-            data : newUser,
         }
     }
     static async login(res : Response, payload : Partial<UserInterface>) {
