@@ -1058,5 +1058,81 @@ export const paths = {
         }
       }
     }
+  },
+  '/users/search': {
+  get: {
+    tags: ['Users'],
+    summary: 'Search Users',
+    description: 'Search users by username or email',
+    security: [{ BearerAuth: [] }],
+    parameters: [
+      {
+        name: 'username',
+        in: 'query',
+        required: true,
+        schema: { type: 'string' },
+        description: 'Keyword to search by username'
+      },
+      {
+        name: 'page',
+        in: 'query',
+        required: true,
+        schema: { type: 'number' },
+        description: 'Page'
+      },
+      {
+        name: 'limit',
+        in: 'query',
+        required: true,
+        schema: { type: 'number' },
+        description: 'Limit'
+      },
+    ],
+    responses: {
+      200: {
+        description: 'Users found',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: { type: 'number', example: 200 },
+                message: { type: 'string', example: 'Users found' },
+                data: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'number', example: 1 },
+                      username: { type: 'string', example: 'congtung' },
+                      email: { type: 'string', example: 'tung@gmail.com' },
+                      role: { type: 'string', example: 'user' },
+                      avatar: { type: 'string', example: 'tung.jpg' },
+                      gender: { type: 'string', example: 'male' },
+                      birthday: { type: 'string', format: 'date', example: '2002-02-01' }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      404: {
+        description: 'No users found',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: { type: 'number', example: 404 },
+                message: { type: 'string', example: 'No users found' }
+              }
+            }
+          }
+        }
+      }
+    }
   }
+},
 };

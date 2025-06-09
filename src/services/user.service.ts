@@ -87,6 +87,24 @@ class UserService {
             message : 'Update user successfully',
         }
     }
+    static async searchUser(username : string, limit : number, skip : number) {
+        const user = await User.createQueryBuilder('user')
+            .where('user.username LIKE :username', { username: `%${username}%` })
+            .skip(skip)
+            .limit(limit)
+            .getMany();
+        if (!user || user.length === 0) {
+            return {
+                code: 404,
+                message: 'User not found',
+            };
+        }
+        return {
+            code: 200,
+            message: 'User found',
+            data: user,
+        };
+    }
 }
 
 export default UserService

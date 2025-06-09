@@ -9,7 +9,7 @@ const authentication = async (req: Request, res: Response, next: NextFunction): 
       const accessToken = authHeader && authHeader.split(" ")[1];
 
       if (!accessToken) {
-          res.status(200).json({
+          res.status(404).json({
             code: 404,
             status: "Error",
             message: "No access token provided",
@@ -24,7 +24,7 @@ const authentication = async (req: Request, res: Response, next: NextFunction): 
         const tokenExists = await Token.findOne({ where: { token: accessToken } });
         
         if (!tokenExists) {
-            res.status(200).json({
+            res.status(404).json({
               code: 404,
               status: "Error",
               message: "Token not found",
@@ -32,9 +32,9 @@ const authentication = async (req: Request, res: Response, next: NextFunction): 
             return;
         }
         next();
-        
+     
       } catch (err) {
-        res.status(200).json({
+        res.status(403).json({
           code: 403,
           status: "Error",
           message: "Invalid token",

@@ -99,5 +99,25 @@ class UserService {
             };
         });
     }
+    static searchUser(username, limit, skip) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_entity_1.User.createQueryBuilder('user')
+                .where('user.username LIKE :username', { username: `%${username}%` })
+                .skip(skip)
+                .limit(limit)
+                .getMany();
+            if (!user || user.length === 0) {
+                return {
+                    code: 404,
+                    message: 'User not found',
+                };
+            }
+            return {
+                code: 200,
+                message: 'User found',
+                data: user,
+            };
+        });
+    }
 }
 exports.default = UserService;

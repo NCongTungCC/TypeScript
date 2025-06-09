@@ -19,7 +19,7 @@ const authentication = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     const authHeader = req.headers.authorization;
     const accessToken = authHeader && authHeader.split(" ")[1];
     if (!accessToken) {
-        res.status(200).json({
+        res.status(404).json({
             code: 404,
             status: "Error",
             message: "No access token provided",
@@ -31,7 +31,7 @@ const authentication = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         req.user = user;
         const tokenExists = yield token_entity_1.Token.findOne({ where: { token: accessToken } });
         if (!tokenExists) {
-            res.status(200).json({
+            res.status(404).json({
                 code: 404,
                 status: "Error",
                 message: "Token not found",
@@ -41,7 +41,7 @@ const authentication = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         next();
     }
     catch (err) {
-        res.status(200).json({
+        res.status(403).json({
             code: 403,
             status: "Error",
             message: "Invalid token",

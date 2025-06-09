@@ -35,7 +35,7 @@ class AuthService {
         await newUser.save();
         return {
             code : 201,
-            message : 'Signup successful',
+            message : 'Signup successfully',
         }
     }
     static async login(res : Response, payload : Partial<UserInterface>) {
@@ -54,7 +54,6 @@ class AuthService {
                 message : 'Incorrect password',
             }
         }
-       
         const accessToken = await generateToken(user);
         res.cookie('jwt', accessToken, {
             httpOnly: true,
@@ -107,7 +106,7 @@ class AuthService {
         user.password = hashedPassword as string;
         await user.save();
         await Token.delete({ userId: user.id });
-    
+
         return {
             code : 200,
             message : 'Password changed successfully',
@@ -171,7 +170,6 @@ class AuthService {
             message: 'Password reset successfully',
         }
     }
-
 }
 
 export default AuthService

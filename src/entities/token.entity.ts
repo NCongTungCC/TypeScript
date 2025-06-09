@@ -16,7 +16,6 @@ export class Token extends BaseEntity {
     createdAt!: Date;
 
     @Column({ type: "timestamp", nullable: true })
-    @Index("idx_token_expiry")
     expiresAt?: Date;
 }
 

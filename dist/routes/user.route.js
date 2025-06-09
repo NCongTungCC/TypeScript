@@ -14,4 +14,5 @@ router.get('/users', authentication_middleware_1.default, (0, catchAsync_middlew
 router.delete('/users/:id', authentication_middleware_1.default, (0, authorization_middleware_1.premission)(constants_helper_1.Role.ADMIN), (0, catchAsync_middleware_1.default)(user_controller_1.default.deleteUser));
 router.post('/users', authentication_middleware_1.default, (0, authorization_middleware_1.premission)(constants_helper_1.Role.ADMIN), (0, catchAsync_middleware_1.default)(user_controller_1.default.createUser));
 router.put('/users/:id', authentication_middleware_1.default, (0, authorization_middleware_1.premission)(constants_helper_1.Role.ADMIN), (0, catchAsync_middleware_1.default)(user_controller_1.default.updateUser));
+router.get('/users/search', authentication_middleware_1.default, (0, authorization_middleware_1.premission)(constants_helper_1.Role.ADMIN), (0, catchAsync_middleware_1.default)(user_controller_1.default.findUser));
 exports.default = router;

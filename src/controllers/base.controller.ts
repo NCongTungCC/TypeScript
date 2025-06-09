@@ -15,7 +15,7 @@ abstract class BaseController {
         const code = response?.code;
         
         res.status(code).json(response);
-    } 
+    }
     
     protected async handleRequest<T>(
         res: Response<T>,

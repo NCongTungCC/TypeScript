@@ -48,7 +48,7 @@ class AuthService {
             yield newUser.save();
             return {
                 code: 201,
-                message: 'Signup successful',
+                message: 'Signup successfully',
             };
         });
     }
