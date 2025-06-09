@@ -7,6 +7,7 @@ import useSwagger from './docs/swagger';
 import errorHandler from './middlewares/error.middleware';
 import cors from 'cors';
 import morgan from 'morgan';
+import { setupTokenCleanupEvent } from './helpers/setupTokenCleanupEvent.helper';
 
 dotenv.config();
 
@@ -27,7 +28,8 @@ app.use('', router)
 app.use(errorHandler);
 
 AppDataSource.initialize()
-  .then(() => {
+  .then(async () => {
+    await setupTokenCleanupEvent(AppDataSource);
     console.log('Kết nối database thành công');
 
     app.listen(port, () => {

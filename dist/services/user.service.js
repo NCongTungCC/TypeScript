@@ -13,13 +13,14 @@ const user_entity_1 = require("../entities/user.entity");
 const password_helper_1 = require("../helpers/password.helper");
 const validate_helper_1 = require("../helpers/validate.helper");
 const token_entity_1 = require("../entities/token.entity");
+const constants_helper_1 = require("../helpers/constants.helper");
 class UserService {
     static getUser(_a) {
         return __awaiter(this, arguments, void 0, function* ({ id, role }) {
             const users = yield user_entity_1.User.createQueryBuilder('user')
-                .where(role === 'admin' ? '1=1' : role === 'manager' ? 'user.role = :filterRole' : 'user.id = :id', role === 'admin' ? {}
-                : role === 'manager'
-                    ? { filterRole: 'user' }
+                .where(role === constants_helper_1.Role.ADMIN ? '1=1' : role === constants_helper_1.Role.MANAGER ? 'user.role = :filterRole' : 'user.id = :id', role === constants_helper_1.Role.ADMIN ? {}
+                : role === constants_helper_1.Role.MANAGER
+                    ? { filterRole: constants_helper_1.Role.USER }
                     : { id: id })
                 .getMany();
             if (!users) {

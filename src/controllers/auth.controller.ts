@@ -1,6 +1,6 @@
 import {Response, Request} from 'express';
 import AuthService from '../services/auth.service';
-import BaseController from '../controllers/base.controller';
+import BaseController from './base.controller';
 
 class AuthController extends BaseController {
     constructor() {
@@ -22,7 +22,7 @@ class AuthController extends BaseController {
         await controller.handleRequest(res, req, (req) => AuthService.logout(userId, res));
     }
 
-    static changePasswod = async (req : Request, res : Response) => {
+    static changePassword = async (req : Request, res : Response) => {
         const controller = new AuthController();
         const { password, newPassword, confirmPassword } = req.body;
         await controller.handleRequest(res, req, (req) => AuthService.changePass({id: req.user?.id, password, newPassword, confirmPassword}));

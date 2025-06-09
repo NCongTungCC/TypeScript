@@ -1,4 +1,4 @@
-import { Entity, Column, BaseEntity, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, BaseEntity, PrimaryGeneratedColumn, Index } from "typeorm";
 
 
 @Entity()
@@ -16,6 +16,7 @@ export class Token extends BaseEntity {
     createdAt!: Date;
 
     @Column({ type: "timestamp", nullable: true })
+    @Index("idx_token_expiry")
     expiresAt?: Date;
 }
 

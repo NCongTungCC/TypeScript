@@ -1,16 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
 import { IsNotEmpty, Length, IsEnum, Matches } from 'class-validator';
-
-export enum Gender {
-  MALE = 'male',
-  FEMALE = 'female'
-}
-
-export enum Role {
-  ADMIN = 'admin',
-  MANAGER = 'manager',
-  USER = 'user'
-}
+import {Role, Gender} from '../helpers/constants.helper';
 
 @Entity()
 export class User extends BaseEntity {

@@ -7,6 +7,7 @@ import { Response } from "express";
 import { Token } from "../entities/token.entity";
 import crypto from "crypto";
 import { sendOTPEmail } from "../helpers/sendEmail.helper";
+import {Role} from '../helpers/constants.helper';
 
 class AuthService {
     static async signup(payload : Partial<UserInterface>) {
@@ -19,7 +20,7 @@ class AuthService {
             }
         }
         const count = await User.count();
-        const role = count === 0 ? "admin" : "user"; 
+        const role = count === 0 ? Role.ADMIN : Role.USER; 
         const newUser = await User.create({
             username,
             email,
@@ -53,7 +54,7 @@ class AuthService {
                 message : 'Incorrect password',
             }
         }
-        await Token.delete({ userId: user.id });
+       
         const accessToken = await generateToken(user);
         res.cookie('jwt', accessToken, {
             httpOnly: true,

@@ -20,6 +20,7 @@ const validate_helper_1 = require("../helpers/validate.helper");
 const token_entity_1 = require("../entities/token.entity");
 const crypto_1 = __importDefault(require("crypto"));
 const sendEmail_helper_1 = require("../helpers/sendEmail.helper");
+const constants_helper_1 = require("../helpers/constants.helper");
 class AuthService {
     static signup(payload) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -32,7 +33,7 @@ class AuthService {
                 };
             }
             const count = yield user_entity_1.User.count();
-            const role = count === 0 ? "admin" : "user";
+            const role = count === 0 ? constants_helper_1.Role.ADMIN : constants_helper_1.Role.USER;
             const newUser = yield user_entity_1.User.create({
                 username,
                 email,
@@ -68,7 +69,6 @@ class AuthService {
                     message: 'Incorrect password',
                 };
             }
-            yield token_entity_1.Token.delete({ userId: user.id });
             const accessToken = yield (0, generateToken_helper_1.generateToken)(user);
             res.cookie('jwt', accessToken, {
                 httpOnly: true,

@@ -26,34 +26,26 @@ const authentication = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         });
         return;
     }
-    const tokenExists = yield token_entity_1.Token.findOne({ where: { token: accessToken } });
-    if (!tokenExists) {
-        res.status(200).json({
-            code: 404,
-            status: "Error",
-            message: "Token not found",
-        });
-        return;
-    }
-    if (!tokenExists.expiresAt || tokenExists.expiresAt < new Date()) {
-        res.status(200).json({
-            code: 403,
-            status: "Error",
-            message: "Token expired",
-        });
-        return;
-    }
-    jsonwebtoken_1.default.verify(accessToken, secret, (err, user) => {
-        if (err) {
+    try {
+        const user = jsonwebtoken_1.default.verify(accessToken, secret);
+        req.user = user;
+        const tokenExists = yield token_entity_1.Token.findOne({ where: { token: accessToken } });
+        if (!tokenExists) {
             res.status(200).json({
-                code: 403,
+                code: 404,
                 status: "Error",
-                message: "Invalid token",
+                message: "Token not found",
             });
             return;
         }
-        req.user = user;
         next();
-    });
+    }
+    catch (err) {
+        res.status(200).json({
+            code: 403,
+            status: "Error",
+            message: "Invalid token",
+        });
+    }
 });
 exports.default = authentication;

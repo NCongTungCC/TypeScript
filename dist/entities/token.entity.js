@@ -32,6 +32,7 @@ __decorate([
 ], Token.prototype, "createdAt", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: "timestamp", nullable: true }),
+    (0, typeorm_1.Index)("idx_token_expiry"),
     __metadata("design:type", Date)
 ], Token.prototype, "expiresAt", void 0);
 exports.Token = Token = __decorate([

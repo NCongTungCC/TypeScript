@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth_service_1 = __importDefault(require("../services/auth.service"));
-const base_controller_1 = __importDefault(require("../controllers/base.controller"));
+const base_controller_1 = __importDefault(require("./base.controller"));
 class AuthController extends base_controller_1.default {
     constructor() {
         super('AuthController');

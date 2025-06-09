@@ -1,5 +1,5 @@
 import { Router } from "express";
-import AuthController from "../auth/auth.controller";
+import AuthController from "../controllers/auth.controller";
 import catchAsync from "../middlewares/catchAsync.middleware";
 import authentication from "../middlewares/authentication.middleware";
 const router = Router();
@@ -10,7 +10,7 @@ router.post('/login', catchAsync(AuthController.login));
 
 router.get('/logout', authentication, catchAsync(AuthController.logout));
 
-router.put('/changepass', authentication, catchAsync(AuthController.changePasswod));
+router.put('/changepass', authentication, catchAsync(AuthController.changePassword));
 
 router.post('/forgotpassword', catchAsync(AuthController.forgotPassword));
 

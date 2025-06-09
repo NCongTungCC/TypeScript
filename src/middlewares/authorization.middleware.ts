@@ -6,7 +6,10 @@ export const premission = (roles : string | string[]) => {
     const allowedRoles = Array.isArray(roles) ? roles : [roles];
 
     if (!req.user || !allowedRoles.includes(req.user?.role)) {
-      res.status(403).json({ message: 'Forbidden' });
+      res.status(403).json({ 
+        code : 403,
+        message: 'Forbidden' 
+      });
       return;
     }
     next();

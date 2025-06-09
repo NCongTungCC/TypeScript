@@ -9,20 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = exports.Role = exports.Gender = void 0;
+exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const class_validator_1 = require("class-validator");
-var Gender;
-(function (Gender) {
-    Gender["MALE"] = "male";
-    Gender["FEMALE"] = "female";
-})(Gender || (exports.Gender = Gender = {}));
-var Role;
-(function (Role) {
-    Role["ADMIN"] = "admin";
-    Role["MANAGER"] = "manager";
-    Role["USER"] = "user";
-})(Role || (exports.Role = Role = {}));
+const constants_helper_1 = require("../helpers/constants.helper");
 let User = class User extends typeorm_1.BaseEntity {
 };
 exports.User = User;
@@ -51,7 +41,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: Role }),
+    (0, typeorm_1.Column)({ type: 'enum', enum: constants_helper_1.Role }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
@@ -59,8 +49,8 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "avatar", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: Gender }),
-    (0, class_validator_1.IsEnum)(Gender, { message: 'Giới tính không hợp lệ' }),
+    (0, typeorm_1.Column)({ type: 'enum', enum: constants_helper_1.Gender }),
+    (0, class_validator_1.IsEnum)(constants_helper_1.Gender, { message: 'Giới tính không hợp lệ' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'Giới tính không được để trống' }),
     __metadata("design:type", String)
 ], User.prototype, "gender", void 0);
