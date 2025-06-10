@@ -43,7 +43,10 @@ class AuthService {
                 role,
                 birthday: new Date(birthday),
             });
-            yield (0, validate_helper_1.Validate)(newUser);
+            const validationResult = yield (0, validate_helper_1.Validate)(newUser);
+            if (validationResult && validationResult.code !== 200) {
+                return validationResult;
+            }
             newUser.password = (yield (0, password_helper_1.hashPassword)(password));
             yield newUser.save();
             return {
@@ -120,7 +123,10 @@ class AuthService {
                 };
             }
             user.password = newPassword;
-            yield (0, validate_helper_1.Validate)(user);
+            const validationResult = yield (0, validate_helper_1.Validate)(user);
+            if (validationResult && validationResult.code !== 200) {
+                return validationResult;
+            }
             const hashedPassword = yield (0, password_helper_1.hashPassword)(newPassword);
             user.password = hashedPassword;
             yield user.save();
@@ -188,6 +194,7 @@ AuthService.resetPassword = (email, newPassword) => __awaiter(void 0, void 0, vo
         };
     }
     user.password = (yield (0, password_helper_1.hashPassword)(newPassword));
+    yield user.save();
     return {
         code: 200,
         message: 'Password reset successfully',

@@ -1057,7 +1057,64 @@ export const paths = {
           }
         }
       }
+    },
+     get: {
+    tags: ['Users'],
+    summary: 'Get User By ID',
+    description: 'Retrieve user information by user ID',
+    security: [{ BearerAuth: [] }],
+    parameters: [
+      {
+        name: 'id',
+        in: 'path',
+        required: true,
+        schema: { type: 'integer' },
+        description: 'User ID'
+      }
+    ],
+    responses: {
+      200: {
+        description: 'User found',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: { type: 'number', example: 200 },
+                message: { type: 'string', example: 'User found' },
+                data: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'number', example: 1 },
+                    username: { type: 'string', example: 'congtung' },
+                    email: { type: 'string', example: 'tung@gmail.com' },
+                    role: { type: 'string', example: 'user' },
+                    avatar: { type: 'string', example: 'tung.jpg' },
+                    gender: { type: 'string', example: 'male' },
+                    birthday: { type: 'string', format: 'date', example: '2002-02-01' }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      404: {
+        description: 'User not found',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: { type: 'number', example: 404 },
+                message: { type: 'string', example: 'User not found' }
+              }
+            }
+          }
+        }
+      }
     }
+  }
   },
   '/users/search': {
   get: {
@@ -1085,7 +1142,7 @@ export const paths = {
         in: 'query',
         required: true,
         schema: { type: 'number' },
-        description: 'Limit'
+        description: ''
       },
     ],
     responses: {

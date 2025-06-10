@@ -15,6 +15,8 @@ router.post('/users', authentication, premission(Role.ADMIN), catchAsync(UserCon
 
 router.put('/users/:id', authentication, premission(Role.ADMIN), catchAsync(UserController.updateUser));
 
-router.get('/users/search', authentication, premission(Role.ADMIN), catchAsync(UserController.findUser));
+router.get('/users/search', authentication, premission(Role.ADMIN), catchAsync(UserController.searchUser));
+
+router.get('/users/:id', authentication, catchAsync(UserController.getUserById));
 
 export default router;

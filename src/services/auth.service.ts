@@ -7,7 +7,7 @@ import { Response } from "express";
 import { Token } from "../entities/token.entity";
 import crypto from "crypto";
 import { sendOTPEmail } from "../helpers/sendEmail.helper";
-import {Role} from '../helpers/constants.helper';
+import {Role, Gender} from '../helpers/constants.helper';
 
 class AuthService {
     static async signup(payload : Partial<UserInterface>) {
@@ -26,11 +26,14 @@ class AuthService {
             email,
             password,
             avatar,
-            gender : gender as any,
+            gender : gender as Gender,
             role,
             birthday : new Date(birthday as Date),
         })
-        await Validate(newUser);
+        const validationResult = await Validate(newUser);
+        if (validationResult && validationResult.code !== 200) {
+            return validationResult;
+        }
         newUser.password = await hashPassword(password as string) as string;
         await newUser.save();
         return {
@@ -101,7 +104,10 @@ class AuthService {
             }
         }
         user.password = newPassword;
-        await Validate(user);
+        const validationResult = await Validate(user);
+        if (validationResult && validationResult.code !== 200) {
+            return validationResult;
+        }
         const hashedPassword = await hashPassword(newPassword);
         user.password = hashedPassword as string;
         await user.save();
@@ -165,6 +171,7 @@ class AuthService {
             }
         }
         user.password = await hashPassword(newPassword) as string;
+        await user.save();
         return {
             code: 200,
             message: 'Password reset successfully',

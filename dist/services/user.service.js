@@ -55,7 +55,10 @@ class UserService {
                 role,
                 birthday: new Date(birthday),
             });
-            yield (0, validate_helper_1.Validate)(newUser);
+            const validationResult = yield (0, validate_helper_1.Validate)(newUser);
+            if (validationResult && validationResult.code !== 200) {
+                return validationResult;
+            }
             newUser.password = (yield (0, password_helper_1.hashPassword)(password));
             yield newUser.save();
             return {
@@ -110,6 +113,22 @@ class UserService {
                 return {
                     code: 404,
                     message: 'User not found',
+                };
+            }
+            return {
+                code: 200,
+                message: 'User found',
+                data: user,
+            };
+        });
+    }
+    static getUserById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_entity_1.User.findOne({ where: { id: id } });
+            if (!user) {
+                return {
+                    code: 404,
+                    message: 'User not found'
                 };
             }
             return {

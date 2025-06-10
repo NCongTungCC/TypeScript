@@ -1,3 +1,4 @@
+import { validate } from 'class-validator';
 import { UserInterface } from './../interfaces/user.interface';
 import { User } from "../entities/user.entity";
 import { hashPassword } from '../helpers/password.helper';
@@ -43,7 +44,10 @@ class UserService {
                 role,
                 birthday : new Date(birthday as Date),
         })
-        await Validate(newUser);
+        const validationResult = await Validate(newUser);
+        if (validationResult && validationResult.code !== 200) {
+            return validationResult;
+        }
         newUser.password = await hashPassword(password as string) as string;
         await newUser.save();
         return {
@@ -87,6 +91,7 @@ class UserService {
             message : 'Update user successfully',
         }
     }
+
     static async searchUser(username : string, limit : number, skip : number) {
         const user = await User.createQueryBuilder('user')
             .where('user.username LIKE :username', { username: `%${username}%` })
@@ -104,6 +109,21 @@ class UserService {
             message: 'User found',
             data: user,
         };
+    }
+
+    static async getUserById(id : number) {
+        const user = await User.findOne({where : {id : id}});
+        if(!user) {
+            return {
+                code : 404,
+                message : 'User not found'
+            }
+        }
+        return {
+            code : 200, 
+            message : 'User found',
+            data : user,
+        }
     }
 }
 

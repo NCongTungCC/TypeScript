@@ -14,10 +14,19 @@ const class_validator_1 = require("class-validator");
 const Validate = (entity) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = yield (0, class_validator_1.validate)(entity);
     if (errors.length > 0) {
-        throw new Error(JSON.stringify(errors.map(err => ({
+        const validationErrors = errors.map(err => ({
             property: err.property,
             constraints: err.constraints,
-        }))));
+        }));
+        return {
+            code: 422,
+            message: 'Validation failed',
+            errors: validationErrors
+        };
     }
+    return {
+        code: 200,
+        message: 'Validation successful'
+    };
 });
 exports.Validate = Validate;
