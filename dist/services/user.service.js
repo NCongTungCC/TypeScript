@@ -108,6 +108,7 @@ class UserService {
                 .where('user.username LIKE :username', { username: `%${username}%` })
                 .skip(skip)
                 .limit(limit)
+                .select(['user.id', 'user.username', 'user.email', 'user.role', 'user.avatar', 'user.gender', 'user.birthday'])
                 .getMany();
             if (!user || user.length === 0) {
                 return {
@@ -124,7 +125,10 @@ class UserService {
     }
     static getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_entity_1.User.findOne({ where: { id: id } });
+            const user = yield user_entity_1.User.findOne({
+                where: { id: id },
+                select: ['id', 'username', 'email', 'role', 'avatar', 'gender', 'birthday']
+            });
             if (!user) {
                 return {
                     code: 404,

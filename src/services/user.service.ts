@@ -97,6 +97,7 @@ class UserService {
             .where('user.username LIKE :username', { username: `%${username}%` })
             .skip(skip)
             .limit(limit)
+            .select(['user.id', 'user.username', 'user.email', 'user.role', 'user.avatar', 'user.gender', 'user.birthday'])
             .getMany();
         if (!user || user.length === 0) {
             return {
@@ -112,7 +113,10 @@ class UserService {
     }
 
     static async getUserById(id : number) {
-        const user = await User.findOne({where : {id : id}});
+        const user = await User.findOne({
+            where : {id : id}, 
+            select: ['id', 'username', 'email', 'role', 'avatar', 'gender', 'birthday']
+        });
         if(!user) {
             return {
                 code : 404,
