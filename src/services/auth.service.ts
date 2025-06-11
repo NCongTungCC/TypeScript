@@ -82,7 +82,7 @@ class AuthService {
             message: 'Logout successful',
         }
     }
-    static async changePass({id, password, newPassword, confirmPassword} : any) {
+    static async changePassword({id, password, newPassword, confirmPassword} : any) {
         const user = await User.findOne({where : { id : id }});
         if(!user) {
             return {
@@ -161,6 +161,7 @@ class AuthService {
             message: 'OTP verified successfully',
         }
     }
+    
 
     static resetPassword = async (email : string, newPassword: string) => {
         const user = await User.findOne({ where: { email: email } });

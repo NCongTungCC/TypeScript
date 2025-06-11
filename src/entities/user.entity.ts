@@ -8,34 +8,34 @@ export class User extends BaseEntity {
       id!: number;
 
       @Column()
-      @IsNotEmpty({message : 'Tên không được để trống'})
-      @Length(5, 20, {message : 'Tên phải có độ dài từ 5 đến 20 ký tự'})
+      @IsNotEmpty({message : 'Name must not be empty'})
+      @Length(5, 20, {message : 'Name must be between 5 and 20 characters'})
       username!: string;
 
       @Column({ unique: true })
-      @IsNotEmpty({message : 'Email không được để trống'})
-      @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, {
-      message: 'Email phải đúng định dạng (ví dụ: example@gmail.com)'
+      @IsNotEmpty({message : 'Email must not be empty'})
+      @Matches(/^[\w-\.]+@gmail\.com$/, {
+            message: 'Email must be in the correct format (e.g., example@gmail.com)'
       })
       email!: string;
 
       @Column()
-      @IsNotEmpty({message : 'Mật khẩu không được để trống'})
-      @Length(6, 20, {message : 'Mật khẩu phải có độ dài từ 6 đến 20 ký tự'})
+      @IsNotEmpty({message : 'Password must not be empty'})
+      @Length(6, 20, {message : 'Password must be between 6 and 20 characters'})
       password!: string;
 
       @Column({ type: 'enum', enum : Role})
       role!: string;
 
-      @Column()
+      @Column({ nullable: true })
       avatar!: string;
 
       @Column({ type: 'enum', enum : Gender})
-      @IsEnum(Gender, {message : 'Giới tính không hợp lệ'})
-      @IsNotEmpty({message : 'Giới tính không được để trống'})
+      @IsEnum(Gender, {message : 'Invalid gender'})
+      @IsNotEmpty({message : 'Gender must not be empty'})
       gender!: Gender;
 
       @Column()
-      @IsNotEmpty({message : 'Ngày sinh không được để trống'})
+      @IsNotEmpty({message : 'Birthday must not be empty'})
       birthday!: Date;
 }

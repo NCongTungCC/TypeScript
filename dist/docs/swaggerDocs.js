@@ -271,7 +271,7 @@ exports.paths = {
             }
         }
     },
-    '/changepass': {
+    '/change-password': {
         put: {
             tags: ['Auth'],
             summary: 'Change Password',
@@ -388,7 +388,7 @@ exports.paths = {
             }
         }
     },
-    '/forgotpassword': {
+    '/forgot-password': {
         post: {
             tags: ['Auth'],
             summary: 'Forgot Password',
@@ -475,7 +475,7 @@ exports.paths = {
             }
         }
     },
-    '/verifyotp': {
+    '/verify-otp': {
         post: {
             tags: ['Auth'],
             summary: 'Verify OTP',
@@ -567,7 +567,7 @@ exports.paths = {
             }
         }
     },
-    '/resetpassword': {
+    '/reset-password': {
         post: {
             tags: ['Auth'],
             summary: 'Reset Password',
@@ -642,59 +642,51 @@ exports.paths = {
     '/users': {
         get: {
             tags: ['Users'],
-            summary: 'Get All Users',
-            description: 'Retrieve list of all users',
+            summary: 'Search Users',
+            description: 'Search users by username or email',
             security: [{ BearerAuth: [] }],
+            parameters: [
+                {
+                    name: 'username',
+                    in: 'query',
+                    schema: { type: 'string' },
+                    description: 'Keyword to search by username'
+                },
+                {
+                    name: 'page',
+                    in: 'query',
+                    schema: { type: 'number' },
+                    description: 'Page'
+                },
+                {
+                    name: 'limit',
+                    in: 'query',
+                    schema: { type: 'number' },
+                    description: ''
+                },
+            ],
             responses: {
                 200: {
-                    description: 'Users retrieved successfully',
+                    description: 'Users found',
                     content: {
                         'application/json': {
                             schema: {
                                 type: 'object',
                                 properties: {
-                                    code: {
-                                        type: 'number',
-                                        example: 200
-                                    },
-                                    message: {
-                                        type: 'string',
-                                        example: 'Get user successfully'
-                                    },
+                                    code: { type: 'number', example: 200 },
+                                    message: { type: 'string', example: 'Users found' },
                                     data: {
                                         type: 'array',
                                         items: {
                                             type: 'object',
                                             properties: {
-                                                id: {
-                                                    type: 'number',
-                                                    example: 1
-                                                },
-                                                username: {
-                                                    type: 'string',
-                                                    example: 'congtung'
-                                                },
-                                                email: {
-                                                    type: 'string',
-                                                    example: 'tung@gmail.com'
-                                                },
-                                                role: {
-                                                    type: 'string',
-                                                    example: 'user'
-                                                },
-                                                avatar: {
-                                                    type: 'string',
-                                                    example: 'tung.jpg'
-                                                },
-                                                gender: {
-                                                    type: 'string',
-                                                    example: 'male'
-                                                },
-                                                birthday: {
-                                                    type: 'string',
-                                                    format: 'date',
-                                                    example: '2002-02-01'
-                                                }
+                                                id: { type: 'number', example: 1 },
+                                                username: { type: 'string', example: 'congtung' },
+                                                email: { type: 'string', example: 'tung@gmail.com' },
+                                                role: { type: 'string', example: 'user' },
+                                                avatar: { type: 'string', example: 'tung.jpg' },
+                                                gender: { type: 'string', example: 'male' },
+                                                birthday: { type: 'string', format: 'date', example: '2002-02-01' }
                                             }
                                         }
                                     }
@@ -703,41 +695,15 @@ exports.paths = {
                         }
                     }
                 },
-                401: {
-                    description: 'Unauthorized',
+                404: {
+                    description: 'No users found',
                     content: {
                         'application/json': {
                             schema: {
                                 type: 'object',
                                 properties: {
-                                    code: {
-                                        type: 'number',
-                                        example: 401
-                                    },
-                                    message: {
-                                        type: 'string',
-                                        example: 'Unauthorized access'
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                403: {
-                    description: 'Forbidden',
-                    content: {
-                        'application/json': {
-                            schema: {
-                                type: 'object',
-                                properties: {
-                                    code: {
-                                        type: 'number',
-                                        example: 403
-                                    },
-                                    message: {
-                                        type: 'string',
-                                        example: 'Insufficient permissions'
-                                    }
+                                    code: { type: 'number', example: 404 },
+                                    message: { type: 'string', example: 'No users found' }
                                 }
                             }
                         }
@@ -1118,58 +1084,65 @@ exports.paths = {
             }
         }
     },
-    '/users/search': {
+    '/books': {
         get: {
-            tags: ['Users'],
-            summary: 'Search Users',
-            description: 'Search users by username or email',
-            security: [{ BearerAuth: [] }],
+            tags: ['Books'],
+            summary: 'Get All Books',
+            description: 'Retrieve a list of all books with pagination',
             parameters: [
-                {
-                    name: 'username',
-                    in: 'query',
-                    required: true,
-                    schema: { type: 'string' },
-                    description: 'Keyword to search by username'
-                },
                 {
                     name: 'page',
                     in: 'query',
-                    required: true,
-                    schema: { type: 'number' },
-                    description: 'Page'
+                    schema: { type: 'integer', default: 1 },
+                    description: 'Page number'
                 },
                 {
                     name: 'limit',
                     in: 'query',
-                    required: true,
-                    schema: { type: 'number' },
-                    description: ''
+                    schema: { type: 'integer', default: 10 },
+                    description: 'Number of items per page'
+                },
+                {
+                    name: 'title',
+                    in: 'query',
+                    schema: { type: 'string' },
+                    description: 'Filter books by title'
                 },
             ],
             responses: {
                 200: {
-                    description: 'Users found',
+                    description: 'Books retrieved successfully',
                     content: {
                         'application/json': {
                             schema: {
                                 type: 'object',
                                 properties: {
                                     code: { type: 'number', example: 200 },
-                                    message: { type: 'string', example: 'Users found' },
+                                    message: { type: 'string', example: 'Books retrieved successfully' },
                                     data: {
-                                        type: 'array',
-                                        items: {
-                                            type: 'object',
-                                            properties: {
-                                                id: { type: 'number', example: 1 },
-                                                username: { type: 'string', example: 'congtung' },
-                                                email: { type: 'string', example: 'tung@gmail.com' },
-                                                role: { type: 'string', example: 'user' },
-                                                avatar: { type: 'string', example: 'tung.jpg' },
-                                                gender: { type: 'string', example: 'male' },
-                                                birthday: { type: 'string', format: 'date', example: '2002-02-01' }
-                                            }
+                                        type: 'object',
+                                        properties: {
+                                            books: {
+                                                type: 'array',
+                                                items: {
+                                                    type: 'object',
+                                                    properties: {
+                                                        id: { type: 'number', example: 1 },
+                                                        title: { type: 'string', example: 'Clean Code' },
+                                                        author: { type: 'string', example: 'Robert C. Martin' },
+                                                        poster: { type: 'string', example: 'clean-code.jpg' },
+                                                        year: { type: 'number', example: 2008 },
+                                                        genre: { type: 'string', example: 'Programming' },
+                                                        description: { type: 'string', example: 'A handbook of agile software craftsmanship' },
+                                                        totalBooks: { type: 'number', example: 5 },
+                                                        availableBooks: { type: 'number', example: 3 },
+                                                        borrowedBooks: { type: 'number', example: 2 }
+                                                    }
+                                                }
+                                            },
+                                            currentPage: { type: 'number', example: 1 },
+                                            totalPages: { type: 'number', example: 10 },
+                                            totalItems: { type: 'number', example: 100 }
                                         }
                                     }
                                 }
@@ -1178,14 +1151,308 @@ exports.paths = {
                     }
                 },
                 404: {
-                    description: 'No users found',
+                    description: 'No books found',
                     content: {
                         'application/json': {
                             schema: {
                                 type: 'object',
                                 properties: {
                                     code: { type: 'number', example: 404 },
-                                    message: { type: 'string', example: 'No users found' }
+                                    message: { type: 'string', example: 'No books found' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        post: {
+            tags: ['Books'],
+            summary: 'Create New Book',
+            description: 'Add a new book to the library (admin only)',
+            security: [{ BearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            required: ['title', 'author', 'year', 'genre'],
+                            properties: {
+                                title: { type: 'string', example: 'Design Patterns' },
+                                author: { type: 'string', example: 'Erich Gamma et al.' },
+                                poster: { type: 'string', example: 'design-patterns.jpg' },
+                                year: { type: 'number', example: 1994 },
+                                genre: { type: 'string', example: 'Programming' },
+                                description: {
+                                    type: 'string',
+                                    example: 'Elements of Reusable Object-Oriented Software'
+                                },
+                                totalBooks: { type: 'number', example: 3 },
+                                availableBooks: { type: 'number', example: 3 }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                201: {
+                    description: 'Book created successfully',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: { type: 'number', example: 201 },
+                                    message: { type: 'string', example: 'Book created successfully' },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            id: { type: 'number', example: 10 },
+                                            title: { type: 'string', example: 'Design Patterns' },
+                                            author: { type: 'string', example: 'Erich Gamma et al.' }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                400: {
+                    description: 'Validation error',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: { type: 'number', example: 400 },
+                                    message: { type: 'string', example: 'Validation failed' },
+                                    errors: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                property: { type: 'string', example: 'title' },
+                                                constraints: {
+                                                    type: 'object',
+                                                    example: { isNotEmpty: 'Title should not be empty' }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                403: {
+                    description: 'Insufficient permissions',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: { type: 'number', example: 403 },
+                                    message: { type: 'string', example: 'Admin access required' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    '/books/{id}': {
+        get: {
+            tags: ['Books'],
+            summary: 'Get Book By ID',
+            description: 'Retrieve a book by its ID',
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    schema: { type: 'integer' },
+                    description: 'Book ID'
+                }
+            ],
+            responses: {
+                200: {
+                    description: 'Book found',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: { type: 'number', example: 200 },
+                                    message: { type: 'string', example: 'Book found' },
+                                    data: {
+                                        type: 'object',
+                                        properties: {
+                                            id: { type: 'number', example: 1 },
+                                            title: { type: 'string', example: 'Clean Code' },
+                                            author: { type: 'string', example: 'Robert C. Martin' },
+                                            poster: { type: 'string', example: 'clean-code.jpg' },
+                                            year: { type: 'number', example: 2008 },
+                                            genre: { type: 'string', example: 'Programming' },
+                                            description: { type: 'string', example: 'A handbook of agile software craftsmanship' },
+                                            totalBooks: { type: 'number', example: 5 },
+                                            availableBooks: { type: 'number', example: 3 },
+                                            borrowedBooks: { type: 'number', example: 2 }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                404: {
+                    description: 'Book not found',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: { type: 'number', example: 404 },
+                                    message: { type: 'string', example: 'Book not found' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        put: {
+            tags: ['Books'],
+            summary: 'Update Book',
+            description: 'Update book information (admin only)',
+            security: [{ BearerAuth: [] }],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    schema: { type: 'integer' },
+                    description: 'Book ID'
+                }
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                title: { type: 'string', example: 'Updated Title' },
+                                author: { type: 'string', example: 'Updated Author' },
+                                poster: { type: 'string', example: 'updated-poster.jpg' },
+                                year: { type: 'number', example: 2010 },
+                                genre: { type: 'string', example: 'Updated Genre' },
+                                description: { type: 'string', example: 'Updated description of the book' },
+                                totalBooks: { type: 'number', example: 7 },
+                                availableBooks: { type: 'number', example: 5 }
+                            }
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: {
+                    description: 'Book updated successfully',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: { type: 'number', example: 200 },
+                                    message: { type: 'string', example: 'Book updated successfully' }
+                                }
+                            }
+                        }
+                    }
+                },
+                404: {
+                    description: 'Book not found',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: { type: 'number', example: 404 },
+                                    message: { type: 'string', example: 'Book not found' }
+                                }
+                            }
+                        }
+                    }
+                },
+                403: {
+                    description: 'Insufficient permissions',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: { type: 'number', example: 403 },
+                                    message: { type: 'string', example: 'Admin access required' }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        delete: {
+            tags: ['Books'],
+            summary: 'Delete Book',
+            description: 'Remove a book from the library (admin only)',
+            security: [{ BearerAuth: [] }],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    schema: { type: 'integer' },
+                    description: 'Book ID'
+                }
+            ],
+            responses: {
+                200: {
+                    description: 'Book deleted successfully',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: { type: 'number', example: 200 },
+                                    message: { type: 'string', example: 'Book deleted successfully' }
+                                }
+                            }
+                        }
+                    }
+                },
+                404: {
+                    description: 'Book not found',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: { type: 'number', example: 404 },
+                                    message: { type: 'string', example: 'Book not found' }
+                                }
+                            }
+                        }
+                    }
+                },
+                403: {
+                    description: 'Insufficient permissions',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    code: { type: 'number', example: 403 },
+                                    message: { type: 'string', example: 'Admin access required' }
                                 }
                             }
                         }

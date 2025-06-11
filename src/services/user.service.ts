@@ -1,31 +1,12 @@
-import { validate } from 'class-validator';
 import { UserInterface } from './../interfaces/user.interface';
 import { User } from "../entities/user.entity";
 import { hashPassword } from '../helpers/password.helper';
 import { Validate } from '../helpers/validate.helper';
 import { Token } from '../entities/token.entity';
-import { Role } from '../helpers/constants.helper';
+import { Role, Gender } from '../helpers/constants.helper';
+import { Like } from 'typeorm';
 
 class UserService {
-    static async getUser({id, role} : Partial<UserInterface>) {
-        const users = await User.createQueryBuilder('user')
-            .where( role === Role.ADMIN ? '1=1' : role === Role.MANAGER ? 'user.role = :filterRole' : 'user.id = :id', role === Role.ADMIN ? {} 
-                    : role === Role.MANAGER
-                    ? { filterRole: Role.USER }
-                    : { id: id })
-            .getMany();
-        if(!users) {
-            return {
-                code : 404,
-                message : 'Not found user',
-            }
-        }
-        return {
-            code: 200,
-            message: 'Get user successfully',
-            data : users,
-        }
-    }
     static async createUser(payload : Partial<UserInterface>) {
         const {username, email, password, avatar, role, gender, birthday} = payload;
         const user = await User.findOne({where : {email : email}});
@@ -40,7 +21,7 @@ class UserService {
                 email,
                 password,
                 avatar,
-                gender : gender as any,
+                gender : gender as Gender,
                 role,
                 birthday : new Date(birthday as Date),
         })
@@ -92,13 +73,14 @@ class UserService {
         }
     }
 
-    static async searchUser(username : string, limit : number, skip : number) {
-        const user = await User.createQueryBuilder('user')
-            .where('user.username LIKE :username', { username: `%${username}%` })
-            .skip(skip)
-            .limit(limit)
-            .select(['user.id', 'user.username', 'user.email', 'user.role', 'user.avatar', 'user.gender', 'user.birthday'])
-            .getMany();
+    static async getUser(username : string, limit : number, skip : number) {
+        const user = await User.find({
+            where: { username: Like(`%${username}%`) },
+            select : ['id', 'username', 'email', 'role', 'avatar', 'gender', 'birthday'],
+            take: limit,
+            skip: skip,
+            order: { id: 'ASC' }
+        });
         if (!user || user.length === 0) {
             return {
                 code: 404,

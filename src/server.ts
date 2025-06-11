@@ -8,6 +8,7 @@ import errorHandler from './middlewares/error.middleware';
 import cors from 'cors';
 import morgan from 'morgan';
 import { setupTokenCleanupEvent } from './helpers/setupTokenCleanupEvent.helper';
+import { setupBorrowStatusChecker } from './helpers/setupStatusEvent.helper';
 
 dotenv.config();
 
@@ -30,8 +31,8 @@ app.use(errorHandler);
 AppDataSource.initialize()
   .then(async () => {
     await setupTokenCleanupEvent(AppDataSource);
+    await setupBorrowStatusChecker(AppDataSource);
     console.log('Kết nối database thành công');
-
     app.listen(port, () => {
       console.log(`Server đang khởi chạy trên port: ${port}`);
     });

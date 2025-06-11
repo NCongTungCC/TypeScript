@@ -22,22 +22,22 @@ __decorate([
 ], User.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Tên không được để trống' }),
-    (0, class_validator_1.Length)(5, 20, { message: 'Tên phải có độ dài từ 5 đến 20 ký tự' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Name must not be empty' }),
+    (0, class_validator_1.Length)(5, 20, { message: 'Name must be between 5 and 20 characters' }),
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
 __decorate([
     (0, typeorm_1.Column)({ unique: true }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Email không được để trống' }),
-    (0, class_validator_1.Matches)(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, {
-        message: 'Email phải đúng định dạng (ví dụ: example@gmail.com)'
+    (0, class_validator_1.IsNotEmpty)({ message: 'Email must not be empty' }),
+    (0, class_validator_1.Matches)(/^[\w-\.]+@gmail\.com$/, {
+        message: 'Email must be in the correct format (e.g., example@gmail.com)'
     }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Mật khẩu không được để trống' }),
-    (0, class_validator_1.Length)(6, 20, { message: 'Mật khẩu phải có độ dài từ 6 đến 20 ký tự' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Password must not be empty' }),
+    (0, class_validator_1.Length)(6, 20, { message: 'Password must be between 6 and 20 characters' }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
@@ -45,18 +45,18 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "avatar", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'enum', enum: constants_helper_1.Gender }),
-    (0, class_validator_1.IsEnum)(constants_helper_1.Gender, { message: 'Giới tính không hợp lệ' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Giới tính không được để trống' }),
+    (0, class_validator_1.IsEnum)(constants_helper_1.Gender, { message: 'Invalid gender' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Gender must not be empty' }),
     __metadata("design:type", String)
 ], User.prototype, "gender", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Ngày sinh không được để trống' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Birthday must not be empty' }),
     __metadata("design:type", Date)
 ], User.prototype, "birthday", void 0);
 exports.User = User = __decorate([

@@ -15,9 +15,8 @@ export const Validate = async (entity: object) => {
       errors: validationErrors
     };
   }
-
   return {
     code: 200,
-    message: 'Validation successful'
+    message: 'Validation successfully'
   };
 };

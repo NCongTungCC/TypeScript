@@ -25,7 +25,7 @@ class AuthController extends BaseController {
     static changePassword = async (req : Request, res : Response) => {
         const controller = new AuthController();
         const { password, newPassword, confirmPassword } = req.body;
-        await controller.handleRequest(res, req, (req) => AuthService.changePass({id: req.user?.id, password, newPassword, confirmPassword}));
+        await controller.handleRequest(res, req, (req) => AuthService.changePassword({id: req.user?.id, password, newPassword, confirmPassword}));
     }
 
     static forgotPassword = async (req: Request, res: Response) => {

@@ -26,7 +26,7 @@ const Validate = (entity) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return {
         code: 200,
-        message: 'Validation successful'
+        message: 'Validation successfully'
     };
 });
 exports.Validate = Validate;

@@ -38,7 +38,7 @@ AuthController.logout = (req, res) => __awaiter(void 0, void 0, void 0, function
 AuthController.changePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const controller = new _a();
     const { password, newPassword, confirmPassword } = req.body;
-    yield controller.handleRequest(res, req, (req) => { var _b; return auth_service_1.default.changePass({ id: (_b = req.user) === null || _b === void 0 ? void 0 : _b.id, password, newPassword, confirmPassword }); });
+    yield controller.handleRequest(res, req, (req) => { var _b; return auth_service_1.default.changePassword({ id: (_b = req.user) === null || _b === void 0 ? void 0 : _b.id, password, newPassword, confirmPassword }); });
 });
 AuthController.forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const controller = new _a();

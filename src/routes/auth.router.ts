@@ -10,12 +10,12 @@ router.post('/login', catchAsync(AuthController.login));
 
 router.get('/logout', authentication, catchAsync(AuthController.logout));
 
-router.put('/changepass', authentication, catchAsync(AuthController.changePassword));
+router.put('/change-password', authentication, catchAsync(AuthController.changePassword));
 
-router.post('/forgotpassword', catchAsync(AuthController.forgotPassword));
+router.post('/forgot-password', catchAsync(AuthController.forgotPassword));
 
-router.post('/verifyotp', catchAsync(AuthController.verifyOTP));
+router.post('/verify-otp', catchAsync(AuthController.verifyOTP));
 
-router.post('/resetpassword', catchAsync(AuthController.resetPassword));
+router.put('/reset-password', catchAsync(AuthController.resetPassword));
 
 export default router;

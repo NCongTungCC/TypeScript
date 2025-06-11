@@ -55,6 +55,7 @@ const error_middleware_1 = __importDefault(require("./middlewares/error.middlewa
 const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const setupTokenCleanupEvent_helper_1 = require("./helpers/setupTokenCleanupEvent.helper");
+const setupStatusEvent_helper_1 = require("./helpers/setupStatusEvent.helper");
 dotenv.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
@@ -67,6 +68,7 @@ app.use(error_middleware_1.default);
 config_1.AppDataSource.initialize()
     .then(() => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, setupTokenCleanupEvent_helper_1.setupTokenCleanupEvent)(config_1.AppDataSource);
+    yield (0, setupStatusEvent_helper_1.setupBorrowStatusChecker)(config_1.AppDataSource);
     console.log('Kết nối database thành công');
     app.listen(port, () => {
         console.log(`Server đang khởi chạy trên port: ${port}`);

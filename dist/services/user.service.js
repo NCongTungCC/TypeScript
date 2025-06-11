@@ -13,29 +13,8 @@ const user_entity_1 = require("../entities/user.entity");
 const password_helper_1 = require("../helpers/password.helper");
 const validate_helper_1 = require("../helpers/validate.helper");
 const token_entity_1 = require("../entities/token.entity");
-const constants_helper_1 = require("../helpers/constants.helper");
+const typeorm_1 = require("typeorm");
 class UserService {
-    static getUser(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ id, role }) {
-            const users = yield user_entity_1.User.createQueryBuilder('user')
-                .where(role === constants_helper_1.Role.ADMIN ? '1=1' : role === constants_helper_1.Role.MANAGER ? 'user.role = :filterRole' : 'user.id = :id', role === constants_helper_1.Role.ADMIN ? {}
-                : role === constants_helper_1.Role.MANAGER
-                    ? { filterRole: constants_helper_1.Role.USER }
-                    : { id: id })
-                .getMany();
-            if (!users) {
-                return {
-                    code: 404,
-                    message: 'Not found user',
-                };
-            }
-            return {
-                code: 200,
-                message: 'Get user successfully',
-                data: users,
-            };
-        });
-    }
     static createUser(payload) {
         return __awaiter(this, void 0, void 0, function* () {
             const { username, email, password, avatar, role, gender, birthday } = payload;
@@ -102,14 +81,15 @@ class UserService {
             };
         });
     }
-    static searchUser(username, limit, skip) {
+    static getUser(username, limit, skip) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_entity_1.User.createQueryBuilder('user')
-                .where('user.username LIKE :username', { username: `%${username}%` })
-                .skip(skip)
-                .limit(limit)
-                .select(['user.id', 'user.username', 'user.email', 'user.role', 'user.avatar', 'user.gender', 'user.birthday'])
-                .getMany();
+            const user = yield user_entity_1.User.find({
+                where: { username: (0, typeorm_1.Like)(`%${username}%`) },
+                select: ['id', 'username', 'email', 'role', 'avatar', 'gender', 'birthday'],
+                take: limit,
+                skip: skip,
+                order: { id: 'ASC' }
+            });
             if (!user || user.length === 0) {
                 return {
                     code: 404,

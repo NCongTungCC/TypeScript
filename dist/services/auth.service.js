@@ -100,7 +100,7 @@ class AuthService {
             };
         });
     }
-    static changePass(_b) {
+    static changePassword(_b) {
         return __awaiter(this, arguments, void 0, function* ({ id, password, newPassword, confirmPassword }) {
             const user = yield user_entity_1.User.findOne({ where: { id: id } });
             if (!user) {
