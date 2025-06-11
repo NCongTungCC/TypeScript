@@ -13,6 +13,7 @@ exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const class_validator_1 = require("class-validator");
 const constants_helper_1 = require("../helpers/constants.helper");
+const borrow_entity_1 = require("./borrow.entity");
 let User = class User extends typeorm_1.BaseEntity {
 };
 exports.User = User;
@@ -59,6 +60,10 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Birthday must not be empty' }),
     __metadata("design:type", Date)
 ], User.prototype, "birthday", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => borrow_entity_1.Borrow, (borrow) => borrow.userId),
+    __metadata("design:type", Array)
+], User.prototype, "borrows", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

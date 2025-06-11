@@ -12,6 +12,6 @@ router.use('/library/api/v1', userRouter);
 
 router.use('/library/api/v1', bookRouter);
 
-router.use('library.v1', borrowRouter);
+router.use('/library/api/v1', borrowRouter);
 
 export default router;

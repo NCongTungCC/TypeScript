@@ -1459,4 +1459,150 @@ export const paths = {
     }
   }
 },
+'/books/{id}/borrow': {
+  post: {
+    tags: ['Books'],
+    summary: 'Borrow Book',
+    description: 'Borrow a book from the library',
+    security: [{ BearerAuth: [] }],
+    parameters: [
+      {
+        name: 'id',
+        in: 'path',
+        required: true,
+        schema: { type: 'integer' },
+        description: 'Book ID'
+      }
+    ],
+    responses: {
+      200: {
+        description: 'Book borrowed successfully',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: { type: 'number', example: 200 },
+                message: { type: 'string', example: 'Book borrowed successfully' },
+                data: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'number', example: 1 },
+                    bookId: { type: 'number', example: 3 },
+                    userId: { type: 'number', example: 2 },
+                    borrowDate: { type: 'string', format: 'date-time', example: '2025-06-11T10:00:00Z' },
+                    dueDate: { type: 'string', format: 'date-time', example: '2025-06-25T10:00:00Z' },
+                    status: { type: 'string', example: 'borrowed' }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      400: {
+        description: 'Book not available',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: { type: 'number', example: 400 },
+                message: { type: 'string', example: 'Book is not available for borrowing' }
+              }
+            }
+          }
+        }
+      },
+      404: {
+        description: 'Book not found',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: { type: 'number', example: 404 },
+                message: { type: 'string', example: 'Book not found' }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+},
+
+'/books/{id}/return': {
+  put: {
+    tags: ['Books'],
+    summary: 'Return Book',
+    description: 'Return a borrowed book to the library',
+    security: [{ BearerAuth: [] }],
+    parameters: [
+      {
+        name: 'id',
+        in: 'path',
+        required: true,
+        schema: { type: 'integer' },
+        description: 'Borrowing record ID'
+      }
+    ],
+    responses: {
+      200: {
+        description: 'Book returned successfully',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: { type: 'number', example: 200 },
+                message: { type: 'string', example: 'Book returned successfully' },
+                data: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'number', example: 1 },
+                    bookId: { type: 'number', example: 3 },
+                    userId: { type: 'number', example: 2 },
+                    borrowDate: { type: 'string', format: 'date-time', example: '2025-06-11T10:00:00Z' },
+                    returnDate: { type: 'string', format: 'date-time', example: '2025-06-20T14:30:00Z' },
+                    status: { type: 'string', example: 'returned' }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      400: {
+        description: 'Invalid operation',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: { type: 'number', example: 400 },
+                message: { type: 'string', example: 'Book is already returned' }
+              }
+            }
+          }
+        }
+      },
+      404: {
+        description: 'Record not found',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                code: { type: 'number', example: 404 },
+                message: { type: 'string', example: 'Borrowing record not found' }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+},
+
 };

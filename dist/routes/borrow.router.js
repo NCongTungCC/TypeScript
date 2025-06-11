@@ -8,8 +8,10 @@ const borrow_controller_1 = __importDefault(require("../controllers/borrow.contr
 const authentication_middleware_1 = __importDefault(require("../middlewares/authentication.middleware"));
 const authorization_middleware_1 = require("../middlewares/authorization.middleware");
 const constants_helper_1 = require("../helpers/constants.helper");
+const catchAsync_middleware_1 = __importDefault(require("../middlewares/catchAsync.middleware"));
 const router = (0, express_1.Router)();
-router.post('/borrow/:id', authentication_middleware_1.default, borrow_controller_1.default.borrowBook);
-router.put('/return/:id', authentication_middleware_1.default, borrow_controller_1.default.returnBook);
-router.put('/approve-return/:id', authentication_middleware_1.default, (0, authorization_middleware_1.premission)([constants_helper_1.Role.ADMIN, constants_helper_1.Role.MANAGER]), borrow_controller_1.default.approveReturn);
+router.post('/books/:id/borrow', authentication_middleware_1.default, (0, catchAsync_middleware_1.default)(borrow_controller_1.default.borrowBook));
+router.put('/books/:id/return', authentication_middleware_1.default, (0, catchAsync_middleware_1.default)(borrow_controller_1.default.returnBook));
+router.put('/books/:id/approve-return', authentication_middleware_1.default, (0, authorization_middleware_1.premission)([constants_helper_1.Role.ADMIN, constants_helper_1.Role.MANAGER]), (0, catchAsync_middleware_1.default)(borrow_controller_1.default.approveReturn));
+router.get('/my-books', authentication_middleware_1.default, (0, catchAsync_middleware_1.default)(borrow_controller_1.default.getBorrowedBooks));
 exports.default = router;

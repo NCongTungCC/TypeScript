@@ -12,5 +12,5 @@ const router = (0, express_1.Router)();
 router.use('/library/api/v1', auth_router_1.default);
 router.use('/library/api/v1', user_route_1.default);
 router.use('/library/api/v1', book_router_1.default);
-router.use('library.v1', borrow_router_1.default);
+router.use('/library/api/v1', borrow_router_1.default);
 exports.default = router;

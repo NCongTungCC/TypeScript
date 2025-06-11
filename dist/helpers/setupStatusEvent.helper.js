@@ -15,14 +15,6 @@ function setupBorrowStatusChecker(dataSource) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield dataSource.query("SET GLOBAL event_scheduler = ON;");
-            console.log("Checking for overdue books...");
-            const result = yield dataSource.query(`
-      UPDATE borrow
-      SET status = '${constants_helper_1.Status.OVERDUE}' 
-      WHERE status = '${constants_helper_1.Status.BORROWED}' 
-      AND dueDate < NOW() 
-      AND returnDate IS NULL
-    `);
             yield dataSource.query(`
       CREATE EVENT IF NOT EXISTS check_overdue_books
       ON SCHEDULE EVERY 1 HOUR

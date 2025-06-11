@@ -23,7 +23,7 @@ class BorrowController extends base_controller_1.default {
 _a = BorrowController;
 BorrowController.borrowBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const controller = new _a();
-    yield controller.handleRequest(res, req, (req) => { var _b; return borrow_service_1.default.borrowBook(Number(req.params.id), Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.id)); });
+    yield controller.handleRequest(res, req, (req) => { var _b; return borrow_service_1.default.borrowBook(Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.id), Number(req.params.id)); });
 });
 BorrowController.returnBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const controller = new _a();
@@ -32,5 +32,9 @@ BorrowController.returnBook = (req, res) => __awaiter(void 0, void 0, void 0, fu
 BorrowController.approveReturn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const controller = new _a();
     yield controller.handleRequest(res, req, (req) => borrow_service_1.default.approveReturn(Number(req.params.id)));
+});
+BorrowController.getBorrowedBooks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const controller = new _a();
+    yield controller.handleRequest(res, req, (req) => { var _b; return borrow_service_1.default.getBorrowedBooks(Number((_b = req.user) === null || _b === void 0 ? void 0 : _b.id)); });
 });
 exports.default = BorrowController;

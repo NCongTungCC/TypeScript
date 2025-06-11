@@ -13,6 +13,7 @@ exports.Book = void 0;
 const class_validator_1 = require("class-validator");
 const typeorm_1 = require("typeorm");
 const PrimaryGeneratedColumn_1 = require("typeorm/decorator/columns/PrimaryGeneratedColumn");
+const borrow_entity_1 = require("./borrow.entity");
 let Book = class Book extends typeorm_1.BaseEntity {
 };
 exports.Book = Book;
@@ -70,6 +71,10 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], Book.prototype, "updatedAt", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => borrow_entity_1.Borrow, (borrow) => borrow.bookId),
+    __metadata("design:type", Array)
+], Book.prototype, "borrows", void 0);
 exports.Book = Book = __decorate([
     (0, typeorm_1.Entity)()
 ], Book);

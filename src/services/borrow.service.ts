@@ -4,11 +4,11 @@ import {Not} from 'typeorm'
 
 class BorrowService {
     static async borrowBook(userId : number, bookId : number) {
-        const borrow = await Borrow.find({
+        const borrow = await Borrow.findOne({
             where : {
                 userId,
+                bookId,
                 status : Not('returned'),
-                bookId
             },
         })
         if(borrow) {
@@ -42,11 +42,13 @@ class BorrowService {
             status: 'borrowed'
         });
 
-        await newBorrow.save();
+        await Borrow.getRepository().manager.transaction(async transactionalEntityManager => {
+            await transactionalEntityManager.save(newBorrow);
 
-        book.availableBooks -= 1;
-        book.borrowedBooks += 1;
-        await book.save();
+            book.availableBooks -= 1;
+            book.borrowedBooks += 1;
+            await transactionalEntityManager.save(book);
+        });
 
         return {
             code: 200,
@@ -101,9 +103,13 @@ class BorrowService {
 
         const book = await Book.findOne({where : {id : borrow.bookId}});
         if(book) {
-            book.availableBooks += 1;
-            book.borrowedBooks -= 1;
-            await book.save();
+            await Borrow.getRepository().manager.transaction(async transactionalEntityManager => {
+                await transactionalEntityManager.save(borrow);
+
+                book.availableBooks += 1;
+                book.borrowedBooks -= 1;
+                await transactionalEntityManager.save(book);
+            });
         }
 
         return {
@@ -111,6 +117,20 @@ class BorrowService {
             message : 'Book return approved successfully',
         }
     }
+
+    static async getBorrowedBooks(userId: number) {
+        const borrows = await Borrow.getRepository().find({
+            where: { userId : userId, status: Not('returned') },
+            relations: ['book']
+        });
+        return {
+            code: 200,
+            message: 'Borrowed books retrieved successfully',
+            data: borrows
+        };
+    }
+
+    
 }
 
 export default BorrowService

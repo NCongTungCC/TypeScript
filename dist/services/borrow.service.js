@@ -15,11 +15,11 @@ const typeorm_1 = require("typeorm");
 class BorrowService {
     static borrowBook(userId, bookId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const borrow = yield borrow_entity_1.Borrow.find({
+            const borrow = yield borrow_entity_1.Borrow.findOne({
                 where: {
                     userId,
+                    bookId,
                     status: (0, typeorm_1.Not)('returned'),
-                    bookId
                 },
             });
             if (borrow) {
@@ -51,10 +51,12 @@ class BorrowService {
                 dueDate,
                 status: 'borrowed'
             });
-            yield newBorrow.save();
-            book.availableBooks -= 1;
-            book.borrowedBooks += 1;
-            yield book.save();
+            yield borrow_entity_1.Borrow.getRepository().manager.transaction((transactionalEntityManager) => __awaiter(this, void 0, void 0, function* () {
+                yield transactionalEntityManager.save(newBorrow);
+                book.availableBooks -= 1;
+                book.borrowedBooks += 1;
+                yield transactionalEntityManager.save(book);
+            }));
             return {
                 code: 200,
                 message: 'Book borrowed successfully',
@@ -110,13 +112,29 @@ class BorrowService {
             yield borrow.save();
             const book = yield book_entity_1.Book.findOne({ where: { id: borrow.bookId } });
             if (book) {
-                book.availableBooks += 1;
-                book.borrowedBooks -= 1;
-                yield book.save();
+                yield borrow_entity_1.Borrow.getRepository().manager.transaction((transactionalEntityManager) => __awaiter(this, void 0, void 0, function* () {
+                    yield transactionalEntityManager.save(borrow);
+                    book.availableBooks += 1;
+                    book.borrowedBooks -= 1;
+                    yield transactionalEntityManager.save(book);
+                }));
             }
             return {
                 code: 200,
                 message: 'Book return approved successfully',
+            };
+        });
+    }
+    static getBorrowedBooks(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const borrows = yield borrow_entity_1.Borrow.getRepository().find({
+                where: { userId: userId, status: (0, typeorm_1.Not)('returned') },
+                relations: ['book']
+            });
+            return {
+                code: 200,
+                message: 'Borrowed books retrieved successfully',
+                data: borrows
             };
         });
     }

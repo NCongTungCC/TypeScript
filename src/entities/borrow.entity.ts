@@ -1,6 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BaseEntity } from "typeorm";
-import { IsInt, IsDate, IsString, IsIn, IsOptional } from "class-validator";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn,ManyToOne, UpdateDateColumn, BaseEntity } from "typeorm";
+import { IsInt, IsDate, IsString, IsOptional } from "class-validator";
 import { Status } from "../helpers/constants.helper";
+import { User } from "./user.entity";
+import { Book } from "./book.entity";
 
 @Entity()
 export class Borrow extends BaseEntity {
@@ -19,8 +21,7 @@ export class Borrow extends BaseEntity {
     @IsDate()
     borrowDate!: Date;
 
-    @Column()
-    @IsDate()
+    @Column({default: null, nullable: true})
     returnDate!: Date;
 
     @Column()
@@ -38,4 +39,10 @@ export class Borrow extends BaseEntity {
     @UpdateDateColumn()
     @IsOptional()
     updatedAt?: Date;
+
+    @ManyToOne(() => User, (user) => user.borrows, { onDelete: 'CASCADE' })
+    user!: User;
+
+    @ManyToOne(() => Book, (book) => book.borrows, { onDelete: 'CASCADE' })
+    book!: Book;
 }

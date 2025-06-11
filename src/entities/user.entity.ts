@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from 'typeorm';
 import { IsNotEmpty, Length, IsEnum, Matches } from 'class-validator';
 import {Role, Gender} from '../helpers/constants.helper';
+import { Borrow } from './borrow.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -38,4 +39,7 @@ export class User extends BaseEntity {
       @Column()
       @IsNotEmpty({message : 'Birthday must not be empty'})
       birthday!: Date;
+
+      @OneToMany(() => Borrow, (borrow) => borrow.userId)
+      borrows!: Borrow[];
 }

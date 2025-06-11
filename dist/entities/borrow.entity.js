@@ -13,6 +13,8 @@ exports.Borrow = void 0;
 const typeorm_1 = require("typeorm");
 const class_validator_1 = require("class-validator");
 const constants_helper_1 = require("../helpers/constants.helper");
+const user_entity_1 = require("./user.entity");
+const book_entity_1 = require("./book.entity");
 let Borrow = class Borrow extends typeorm_1.BaseEntity {
 };
 exports.Borrow = Borrow;
@@ -36,8 +38,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Borrow.prototype, "borrowDate", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    (0, class_validator_1.IsDate)(),
+    (0, typeorm_1.Column)({ default: null, nullable: true }),
     __metadata("design:type", Date)
 ], Borrow.prototype, "returnDate", void 0);
 __decorate([
@@ -60,6 +61,14 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Date)
 ], Borrow.prototype, "updatedAt", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.borrows, { onDelete: 'CASCADE' }),
+    __metadata("design:type", user_entity_1.User)
+], Borrow.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => book_entity_1.Book, (book) => book.borrows, { onDelete: 'CASCADE' }),
+    __metadata("design:type", book_entity_1.Book)
+], Borrow.prototype, "book", void 0);
 exports.Borrow = Borrow = __decorate([
     (0, typeorm_1.Entity)()
 ], Borrow);

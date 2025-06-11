@@ -3,13 +3,16 @@ import BorrowController from "../controllers/borrow.controller";
 import authentication from "../middlewares/authentication.middleware";
 import { premission } from "../middlewares/authorization.middleware";
 import { Role } from "../helpers/constants.helper";
+import catchAsync from "../middlewares/catchAsync.middleware";
 
 const router = Router();
 
-router.post('/borrow/:id',authentication, BorrowController.borrowBook);
+router.post('/books/:id/borrow',authentication, catchAsync(BorrowController.borrowBook));
 
-router.put('/return/:id',authentication, BorrowController.returnBook);
+router.put('/books/:id/return',authentication, catchAsync(BorrowController.returnBook));
 
-router.put('/approve-return/:id',authentication, premission([Role.ADMIN, Role.MANAGER]), BorrowController.approveReturn);
+router.put('/books/:id/approve-return',authentication, premission([Role.ADMIN, Role.MANAGER]), catchAsync(BorrowController.approveReturn));
+
+router.get('/my-books', authentication, catchAsync(BorrowController.getBorrowedBooks));
 
 export default router;

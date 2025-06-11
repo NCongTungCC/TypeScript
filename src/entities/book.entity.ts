@@ -1,6 +1,7 @@
 import { IsEmpty, IsNotEmpty } from "class-validator";
-import { Column, Entity, BaseEntity, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity, BaseEntity, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { PrimaryGeneratedColumn } from "typeorm/decorator/columns/PrimaryGeneratedColumn";
+import { Borrow } from "./borrow.entity";
 
 @Entity()
 export class Book extends BaseEntity {
@@ -45,4 +46,7 @@ export class Book extends BaseEntity {
     
     @UpdateDateColumn()
     updatedAt?: Date;
+
+    @OneToMany(() => Borrow, (borrow) => borrow.bookId)
+    borrows!: Borrow[];
 }

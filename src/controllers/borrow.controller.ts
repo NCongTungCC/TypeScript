@@ -9,7 +9,7 @@ class BorrowController extends BaseController {
 
     static borrowBook = async (req: Request, res: Response) => {
         const controller = new BorrowController()
-        await controller.handleRequest(res, req, (req) => BorrowService.borrowBook(Number(req.params.id), Number(req.user?.id)));
+        await controller.handleRequest(res, req, (req) => BorrowService.borrowBook(Number(req.user?.id), Number(req.params.id)));
     }
 
     static returnBook = async (req: Request, res: Response) => {
@@ -20,6 +20,11 @@ class BorrowController extends BaseController {
     static approveReturn = async (req: Request, res: Response) => {
         const controller = new BorrowController();
         await controller.handleRequest(res, req, (req) => BorrowService.approveReturn(Number(req.params.id)));
+    }
+
+    static getBorrowedBooks = async (req: Request, res: Response) => {
+        const controller = new BorrowController();
+        await controller.handleRequest(res, req, (req) => BorrowService.getBorrowedBooks(Number(req.user?.id)));
     }
 }
 
